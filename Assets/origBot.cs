@@ -18,6 +18,7 @@ public class origBot : MonoBehaviour
     public float maxSpeed = 5;
     public int maxScore = 100000;
     float repulsion = 0.75f;
+    public float rotationSpeed = 5;
 
     // Use this for initialization
     void Start()
@@ -26,6 +27,9 @@ public class origBot : MonoBehaviour
         transform.localScale = new Vector2(width, height);
         //spawn
         transform.position = position;
+        //rotate to 0 degrees
+        Quaternion rotation = transform.localRotation;
+        rotation.z = 0;
     }
 
     // Update is called once per frame
@@ -51,15 +55,15 @@ public class origBot : MonoBehaviour
 
             //circle view
             Vector2 dif = transform.position - player.transform.position;
-            float magnitude = getMagnitude(dif);
+            float magnitude1 = getMagnitude(dif);
             //minus (percentOfMaxScore*2)^3 to bias targeting towards those that have more points. 
             //max bias of magnitude -9
-            magnitude -= Mathf.Pow((score / maxScore) * 50, 3);
-            if (magnitude > tempRadar) continue;
+            magnitude1 -= Mathf.Pow((score / maxScore) * 50, 3);
+            if (magnitude1 > tempRadar) continue;
             else
             {
                 target = player;
-                tempRadar = magnitude;
+                tempRadar = magnitude1;
             }
         }
         //if no players are in range
@@ -69,31 +73,53 @@ public class origBot : MonoBehaviour
             rigidbody2D.velocity = scalarTimesVector(0.9f, rigidbody2D.velocity);
             return;
         }
-
-        //TODO: find angle
-
+        
         //slows down to reduce collision chance
         Vector2 newVelocity = target.GetComponent<Rigidbody2D>().position - rigidbody2D.position;
         //adds some repulsion
         newVelocity[0] -= repulsion;
         newVelocity[1] -= repulsion;
-        //proportional to max speed if magnitude is greater
-        if (getMagnitude(newVelocity) > maxSpeed)
+        //find desired angle
+        float degree = findDegree(transform.position - target.transform.position);
+
+        float magnitude = getMagnitude(newVelocity);
+
+        //rotate and move bot
+        if (magnitude >= maxSpeed)
         {
-            float absVelX = Mathf.Abs(newVelocity[0]);
-            float absVelY = Mathf.Abs(newVelocity[1]);
-            float sum = absVelX + absVelY;
-            newVelocity = new Vector2((absVelX / sum) * maxSpeed, (absVelY / sum) * maxSpeed);
+            rotate(degree, maxSpeed);
+        }
+        else
+        {
+            rotate(degree, magnitude);
         }
 
         //move bot
-        rigidbody2D.velocity = newVelocity;
+        //rigidbody2D.velocity = newVelocity * Time.deltaTime;
 
         //predict enemy position over time
 
         //if no enemies in range then choose a direction
         //if edge of map change direction
 
+    }
+
+    /// <summary>
+    /// Finds the degree for Vector1 to point to vector2 in vector1-vector2
+    /// </summary>
+    /// <param name="dif"></param>
+    /// <returns>float</returns>
+    float findDegree(Vector2 dif)
+    {
+        //avoid division by 0
+        if(dif[0] == 0)
+        {
+            if (dif[1] > 0) return 0;
+            else return 180;
+        }
+        //pretend origin is the bot
+        //arctan is always y/x in this case
+        else return Mathf.Atan(dif[1] / dif[0]);
     }
 
     /// <summary>
@@ -119,6 +145,35 @@ public class origBot : MonoBehaviour
         origVector[0] *= scalar;
         origVector[1] *= scalar;
         return origVector;
+    }
+
+    void rotate(float degreeToTarget, float velocity)
+    {
+        // Get the Quaternion
+        Quaternion rot = transform.rotation;
+        //Get Z Euler Angles
+        float z = rot.eulerAngles.z;
+
+        //Change Z angle based on target's position
+        if (z > degreeToTarget)
+            z += rotationSpeed * Time.deltaTime;
+        else if(z < degreeToTarget)
+        {
+            z += rotationSpeed * Time.deltaTime;
+        }
+        //Recreate the Quaternion
+        rot = Quaternion.Euler(0, 0, z);
+
+        //Feed Quaternion into our rotation
+        transform.rotation = rot;
+
+        //Move the ship
+        Vector3 pos = transform.position;
+
+        Vector3 vel = new Vector3(0, velocity * Time.deltaTime, 0);
+        pos += rot * vel;
+
+        transform.position = pos;
     }
 
 }
