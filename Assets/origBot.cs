@@ -18,7 +18,9 @@ public class origBot : MonoBehaviour
     public float maxSpeed = 5;
     public int maxScore = 100000;
     float repulsion = 0.75f;
-    public float rotationSpeed = 5;
+    public float rotationSpeed = 180f;
+
+    private SpriteRenderer target;
 
     // Use this for initialization
     void Start()
@@ -46,7 +48,7 @@ public class origBot : MonoBehaviour
 
         //maybe sort players into grids
 
-        SpriteRenderer target = null;
+        target = null;
         float tempRadar = radar;
         foreach (SpriteRenderer player in players)
         {
@@ -81,6 +83,8 @@ public class origBot : MonoBehaviour
         newVelocity[1] -= repulsion;
         //find desired angle
         float degree = findDegree(transform.position - target.transform.position);
+        Debug.Log(transform.position - target.transform.position);
+        Debug.Log("desired degree = " + degree.ToString());
 
         float magnitude = getMagnitude(newVelocity);
 
@@ -111,15 +115,19 @@ public class origBot : MonoBehaviour
     /// <returns>float</returns>
     float findDegree(Vector2 dif)
     {
+        Debug.Log("xDif: " + dif[0].ToString() + "yDif: " + dif[1].ToString());
         //avoid division by 0
-        if(dif[0] == 0)
+        if (dif[0] == 0)
         {
             if (dif[1] > 0) return 0;
             else return 180;
         }
         //pretend origin is the bot
         //arctan is always y/x in this case
-        else return Mathf.Atan(dif[1] / dif[0]);
+        else
+        {
+            return -Mathf.Atan(dif[1] / dif[0]) * 180 / Mathf.PI;
+        }
     }
 
     /// <summary>
@@ -149,31 +157,47 @@ public class origBot : MonoBehaviour
 
     void rotate(float degreeToTarget, float velocity)
     {
+        if (degreeToTarget < 0) degreeToTarget += 360;
         // Get the Quaternion
         Quaternion rot = transform.rotation;
         //Get Z Euler Angles
         float z = rot.eulerAngles.z;
+        Debug.Log("current d=" + z.ToString());
 
         //Change Z angle based on target's position
-        if (z > degreeToTarget)
-            z += rotationSpeed * Time.deltaTime;
-        else if(z < degreeToTarget)
+        //TODO: keep rotation speed
+        float absDif = Mathf.Abs(degreeToTarget - z);
+        if (absDif >= 180)
         {
-            z += rotationSpeed * Time.deltaTime;
+            if (degreeToTarget < z)
+            {
+                z += rotationSpeed * Time.deltaTime;
+            }
+            else
+            {
+                z -= rotationSpeed * Time.deltaTime;
+            }
         }
-        //Recreate the Quaternion
-        rot = Quaternion.Euler(0, 0, z);
+        else if (absDif < 180 && absDif > 0)
+        {
+            if (degreeToTarget > z)
+            {
+                z += rotationSpeed * Time.deltaTime;
+            }
+            else
+            {
+                z -= rotationSpeed * Time.deltaTime;
+            }
+        }
+        z = degreeToTarget;
+        Debug.Log("new d=" + z.ToString());
+        rot = Quaternion.Euler(0, 0, -z);
 
-        //Feed Quaternion into our rotation
         transform.rotation = rot;
 
-        //Move the ship
-        Vector3 pos = transform.position;
-
-        Vector3 vel = new Vector3(0, velocity * Time.deltaTime, 0);
-        pos += rot * vel;
-
-        transform.position = pos;
+        //proportinally allot velocity to x and y velocity vectors
+        GetComponent<Rigidbody2D>().velocity = new Vector2(-velocity * Mathf.Sin(z), -velocity * Mathf.Cos(z));
+        Debug.Log("velocity= " + GetComponent<Rigidbody2D>().velocity);
     }
 
 }
