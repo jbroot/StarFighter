@@ -147,7 +147,7 @@ TextureImporter:
         width: 112
         height: 77
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -182,12 +182,12 @@ TextureImporter:
       name: Green_Fighter
       rect:
         serializedVersion: 2
-        x: 109
-        y: 78
-        width: 119
-        height: 79
+        x: 111
+        y: 83
+        width: 113
+        height: 74
       alignment: 9
-      pivot: {x: 0.48379466, y: 0.47558922}
+      pivot: {x: 0.50214624, y: 0.47558954}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,10 +202,10 @@ TextureImporter:
       name: Red_Fighter
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
-        width: 110
-        height: 79
+        x: 0
+        y: 7
+        width: 112
+        height: 76
       alignment: 9
       pivot: {x: 0.46493742, y: 0.4755892}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,10 +222,10 @@ TextureImporter:
       name: Enemy_Blue
       rect:
         serializedVersion: 2
-        x: 134
-        y: 643
-        width: 112
-        height: 95
+        x: 141
+        y: 647
+        width: 106
+        height: 83
       alignment: 9
       pivot: {x: 0.53443635, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,12 +242,12 @@ TextureImporter:
       name: Enemy_Green
       rect:
         serializedVersion: 2
-        x: 123
-        y: 520
-        width: 117
-        height: 92
+        x: 133
+        y: 528
+        width: 104
+        height: 82
       alignment: 9
-      pivot: {x: 0.5329647, y: 0.5419225}
+      pivot: {x: 0.5033706, y: 0.5361477}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -262,10 +262,10 @@ TextureImporter:
       name: Brown_Enemy
       rect:
         serializedVersion: 2
-        x: 115
-        y: 416
-        width: 112
-        height: 88
+        x: 120
+        y: 419
+        width: 104
+        height: 85
       alignment: 9
       pivot: {x: 0.5, y: 0.54382807}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -282,10 +282,10 @@ TextureImporter:
       name: Enemy_Grey
       rect:
         serializedVersion: 2
-        x: 115
-        y: 331
-        width: 110
-        height: 88
+        x: 120
+        y: 336
+        width: 105
+        height: 83
       alignment: 9
       pivot: {x: 0.5, y: 0.5876562}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,10 +302,10 @@ TextureImporter:
       name: Enemy_DiskShip1
       rect:
         serializedVersion: 2
-        x: 433
-        y: 927
-        width: 104
-        height: 92
+        x: 444
+        y: 933
+        width: 91
+        height: 91
       alignment: 9
       pivot: {x: 0.5370853, y: 0.54192317}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -322,10 +322,10 @@ TextureImporter:
       name: Enemy_DiskShip2
       rect:
         serializedVersion: 2
-        x: 435
-        y: 838
-        width: 104
-        height: 93
+        x: 444
+        y: 842
+        width: 91
+        height: 91
       alignment: 9
       pivot: {x: 0.5, y: 0.5321767}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -342,10 +342,10 @@ TextureImporter:
       name: Enemy_DiskShip3
       rect:
         serializedVersion: 2
-        x: 433
-        y: 697
-        width: 93
-        height: 91
+        x: 434
+        y: 699
+        width: 91
+        height: 89
       alignment: 9
       pivot: {x: 0.47926414, y: 0.52119195}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,12 +362,12 @@ TextureImporter:
       name: Enemy_BlueDrone
       rect:
         serializedVersion: 2
-        x: 776
-        y: 612
-        width: 35
-        height: 31
+        x: 778
+        y: 613
+        width: 31
+        height: 25
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -383,11 +383,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 778
-        y: 549
-        width: 29
-        height: 33
+        y: 556
+        width: 30
+        height: 24
       alignment: 9
-      pivot: {x: 0.5, y: 0.44156346}
+      pivot: {x: 0.49999592, y: 0.44155884}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -407,7 +407,7 @@ TextureImporter:
         width: 119
         height: 116
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -423,9 +423,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 308
-        width: 121
-        height: 100
+        y: 309
+        width: 120
+        height: 99
       alignment: 9
       pivot: {x: 0.4362499, y: 0.53856874}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -442,12 +442,12 @@ TextureImporter:
       name: Brown_Asteroid_Medium
       rect:
         serializedVersion: 2
-        x: 325
-        y: 472
-        width: 104
-        height: 98
+        x: 327
+        y: 476
+        width: 98
+        height: 96
       alignment: 9
-      pivot: {x: 0.48071563, y: 0.5205156}
+      pivot: {x: 0.50099075, y: 0.48504198}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -462,12 +462,12 @@ TextureImporter:
       name: Grey_Asteroid_Medium
       rect:
         serializedVersion: 2
-        x: 323
-        y: 377
-        width: 104
-        height: 97
+        x: 327
+        y: 381
+        width: 98
+        height: 95
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -482,10 +482,10 @@ TextureImporter:
       name: Brown_Asteroid_Small
       rect:
         serializedVersion: 2
-        x: 234
-        y: 526
-        width: 47
-        height: 48
+        x: 237
+        y: 531
+        width: 45
+        height: 41
       alignment: 9
       pivot: {x: 0.5, y: 0.5401764}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -502,12 +502,12 @@ TextureImporter:
       name: Grey_Asteroid_Small
       rect:
         serializedVersion: 2
-        x: 279
-        y: 528
-        width: 48
-        height: 44
+        x: 283
+        y: 531
+        width: 44
+        height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -527,7 +527,7 @@ TextureImporter:
         width: 9
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -547,7 +547,7 @@ TextureImporter:
         width: 9
         height: 37
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -567,7 +567,7 @@ TextureImporter:
         width: 9
         height: 37
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -587,7 +587,7 @@ TextureImporter:
         width: 14
         height: 54
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
