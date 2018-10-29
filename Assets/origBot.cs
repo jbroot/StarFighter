@@ -19,8 +19,23 @@ public class origBot : MonoBehaviour
     public int maxScore = 100000;
     float repulsion = 0.75f;
     public float rotationSpeed = 180f;
+    /// <summary>
+    /// default is maxSpeed/10
+    /// </summary>
+    public float acceleration = 0;
 
+    /// <summary>
+    /// sprite to target
+    /// </summary>
     private SpriteRenderer target;
+    /// <summary>
+    /// score bias
+    /// </summary>
+    private float maxBias = 0;
+    /// <summary>
+    /// [maxX, minX, maxY, minY] if no target is found then avoid this zone
+    /// </summary>
+    private int[] softBounds;
 
     // Use this for initialization
     void Start()
@@ -32,6 +47,15 @@ public class origBot : MonoBehaviour
         //rotate to 0 degrees
         Quaternion rotation = transform.localRotation;
         rotation.z = 0;
+
+        int boundDifference = 100;
+        softBounds = new int[] {maxXPosition - boundDifference, minXPosition - boundDifference,
+            maxYPosition - boundDifference, minYPosition - boundDifference};
+
+        if (acceleration == 0)
+        {
+            acceleration = maxSpeed / 10;
+        }
     }
 
     // Update is called once per frame
@@ -45,7 +69,7 @@ public class origBot : MonoBehaviour
         
         //find desired angle
         float degree = findDegree(transform.position - target.transform.position);
-        float magnitude = getMagnitude(findVelocity());
+        float magnitude = findVelocity();
 
         //rotate and move bot
         if (magnitude >= maxSpeed)
@@ -61,20 +85,20 @@ public class origBot : MonoBehaviour
 
         //if no enemies in range then choose a direction
         //if edge of map change direction
-
     }
 
     /// <summary>
     /// Finds the desired velocity for this bot
     /// </summary>
     /// <returns></returns>
-    Vector2 findVelocity()
+    float findVelocity()
     {
         //slows down to reduce collision chance
-        Vector2 newVelocity = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
-        //adds some repulsion
+        Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
+        float newVelocity = getMagnitude(dif);
+        /*//adds some repulsion
         newVelocity[0] -= repulsion;
-        newVelocity[1] -= repulsion;
+        newVelocity[1] -= repulsion;*/
         return newVelocity;
     }
 
@@ -84,39 +108,62 @@ public class origBot : MonoBehaviour
     /// <returns></returns>
     bool findTarget()
     {
-        //get current position, velocity, etc
-        //rigidbody2D.velocity = new Vector2(2, 3);
+        //sort players into grids
 
         //get enemies positions, velocity, etc
         //find closest enemy
-        //target.X is player, other is bot
-
-        //sort players into grids
-
         target = null;
         float tempRadar = radar;
         foreach (SpriteRenderer player in players)
         {
+            //skip player if outside boundaries
+            if(player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
+                player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
+            {
+                continue;
+            }
+
             //TODO: find player's score
             float score = 0;
 
             //circle view
             Vector2 dif = transform.position - player.transform.position;
-            float magnitude1 = getMagnitude(dif);
+            float distance = getMagnitude(dif);
             //minus (percentOfMaxScore*2)^3 to bias targeting towards those that have more points. 
-            //max bias of magnitude -9
-            magnitude1 -= Mathf.Pow((score / maxScore) * 50, 3);
-            if (magnitude1 > tempRadar) continue;
+            float bias = Mathf.Pow(score / maxScore * 50, 3);
+            if(bias > maxBias)
+            {
+                bias = maxBias;
+            }
+            distance -= bias;
+            if (distance > tempRadar) continue;
             else
             {
                 target = player;
-                tempRadar = magnitude1;
+                tempRadar = distance;
             }
         }
 
         //if no players are in range
         if (target == null)
         {
+            //TODO: have bots go elsewhere
+            if (transform.position[0] > softBounds[0])
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            }
+            else if(transform.position[0] < softBounds[1])
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            }
+            if(transform.position[1] > softBounds[2])
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            }
+            else if (transform.position[1] < softBounds[3])
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            }
             //gradually slow down
             GetComponent<Rigidbody2D>().velocity = scalarTimesVector(0.9f, GetComponent<Rigidbody2D>().velocity);
             return false;
@@ -131,7 +178,6 @@ public class origBot : MonoBehaviour
     /// <returns>float</returns>
     float findDegree(Vector2 dif)
     {
-        //Debug.Log("xDif: " + dif[0].ToString() + "yDif: " + dif[1].ToString());
         //avoid division by 0
         if (dif[0] == 0)
         {
@@ -179,10 +225,9 @@ public class origBot : MonoBehaviour
         Quaternion rot = transform.rotation;
         //Get Z Euler Angles
         float z = rot.eulerAngles.z;
-        Debug.Log("current d=" + z.ToString());
 
+        rotationSpeed = 10;
         //Change Z angle based on target's position
-        //TODO: keep rotation speed
         float absDif = Mathf.Abs(degreeToTarget - z);
         if (absDif >= 180)
         {
@@ -212,7 +257,13 @@ public class origBot : MonoBehaviour
         transform.rotation = rot;
 
         //proportinally allot velocity to x and y velocity vectors
-        GetComponent<Rigidbody2D>().velocity = new Vector2(-velocity * Mathf.Sin(z), -velocity * Mathf.Cos(z));
+        GetComponent<Rigidbody2D>().velocity = new Vector2(velocity * Mathf.Sin(z), velocity * Mathf.Cos(z));
+
+        /*Vector2 currentPos = GetComponent<Rigidbody2D>().transform.position;
+        //proportinally allot velocity to x and y velocity vectors
+        GetComponent<Rigidbody2D>().transform.position = new Vector2(currentPos[0] + velocity * Mathf.Sin(z) * Time.deltaTime,
+            currentPos[1] + velocity * Mathf.Cos(z) * Time.deltaTime);*/
+        Debug.Log(GetComponent<Rigidbody2D>().velocity);
     }
 
 }
