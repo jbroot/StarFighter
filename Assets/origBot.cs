@@ -37,16 +37,61 @@ public class origBot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var rigidbody2D = GetComponent<Rigidbody2D>();
+        if (!findTarget())
+        {
+            //no target found
+            return;
+        }
+        
+        //find desired angle
+        float degree = findDegree(transform.position - target.transform.position);
+        float magnitude = getMagnitude(findVelocity());
+
+        //rotate and move bot
+        if (magnitude >= maxSpeed)
+        {
+            rotate(degree, maxSpeed);
+        }
+        else
+        {
+            rotate(degree, magnitude);
+        }
+
+        //predict enemy position over time
+
+        //if no enemies in range then choose a direction
+        //if edge of map change direction
+
+    }
+
+    /// <summary>
+    /// Finds the desired velocity for this bot
+    /// </summary>
+    /// <returns></returns>
+    Vector2 findVelocity()
+    {
+        //slows down to reduce collision chance
+        Vector2 newVelocity = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
+        //adds some repulsion
+        newVelocity[0] -= repulsion;
+        newVelocity[1] -= repulsion;
+        return newVelocity;
+    }
+
+    /// <summary>
+    /// Finds target based on proximity. Returns false if no target is found
+    /// </summary>
+    /// <returns></returns>
+    bool findTarget()
+    {
         //get current position, velocity, etc
         //rigidbody2D.velocity = new Vector2(2, 3);
 
-
         //get enemies positions, velocity, etc
         //find closest enemy
-        //player.X is player, other is bot
+        //target.X is player, other is bot
 
-        //maybe sort players into grids
+        //sort players into grids
 
         target = null;
         float tempRadar = radar;
@@ -68,44 +113,15 @@ public class origBot : MonoBehaviour
                 tempRadar = magnitude1;
             }
         }
+
         //if no players are in range
         if (target == null)
         {
             //gradually slow down
-            rigidbody2D.velocity = scalarTimesVector(0.9f, rigidbody2D.velocity);
-            return;
+            GetComponent<Rigidbody2D>().velocity = scalarTimesVector(0.9f, GetComponent<Rigidbody2D>().velocity);
+            return false;
         }
-        
-        //slows down to reduce collision chance
-        Vector2 newVelocity = target.GetComponent<Rigidbody2D>().position - rigidbody2D.position;
-        //adds some repulsion
-        newVelocity[0] -= repulsion;
-        newVelocity[1] -= repulsion;
-        //find desired angle
-        float degree = findDegree(transform.position - target.transform.position);
-        Debug.Log(transform.position - target.transform.position);
-        Debug.Log("desired degree = " + degree.ToString());
-
-        float magnitude = getMagnitude(newVelocity);
-
-        //rotate and move bot
-        if (magnitude >= maxSpeed)
-        {
-            rotate(degree, maxSpeed);
-        }
-        else
-        {
-            rotate(degree, magnitude);
-        }
-
-        //move bot
-        //rigidbody2D.velocity = newVelocity * Time.deltaTime;
-
-        //predict enemy position over time
-
-        //if no enemies in range then choose a direction
-        //if edge of map change direction
-
+        return true;
     }
 
     /// <summary>
@@ -115,7 +131,7 @@ public class origBot : MonoBehaviour
     /// <returns>float</returns>
     float findDegree(Vector2 dif)
     {
-        Debug.Log("xDif: " + dif[0].ToString() + "yDif: " + dif[1].ToString());
+        //Debug.Log("xDif: " + dif[0].ToString() + "yDif: " + dif[1].ToString());
         //avoid division by 0
         if (dif[0] == 0)
         {
@@ -126,7 +142,9 @@ public class origBot : MonoBehaviour
         //arctan is always y/x in this case
         else
         {
-            return -Mathf.Atan(dif[1] / dif[0]) * 180 / Mathf.PI;
+            float degree = -Mathf.Atan(dif[1] / dif[0]) * 180 / Mathf.PI;
+            if (dif[0] < 0) return degree + 90;
+            else return degree - 90;
         }
     }
 
@@ -134,8 +152,7 @@ public class origBot : MonoBehaviour
     /// Returns magnitude from a 2d vector
     /// x^2+y^2 = (return value)^2
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="dif"></param>
     /// <returns></returns>
     float getMagnitude(Vector2 dif)
     {
@@ -178,7 +195,7 @@ public class origBot : MonoBehaviour
                 z -= rotationSpeed * Time.deltaTime;
             }
         }
-        else if (absDif < 180 && absDif > 0)
+        else if (absDif < 180)
         {
             if (degreeToTarget > z)
             {
@@ -190,14 +207,12 @@ public class origBot : MonoBehaviour
             }
         }
         z = degreeToTarget;
-        Debug.Log("new d=" + z.ToString());
         rot = Quaternion.Euler(0, 0, -z);
 
         transform.rotation = rot;
 
         //proportinally allot velocity to x and y velocity vectors
         GetComponent<Rigidbody2D>().velocity = new Vector2(-velocity * Mathf.Sin(z), -velocity * Mathf.Cos(z));
-        Debug.Log("velocity= " + GetComponent<Rigidbody2D>().velocity);
     }
 
 }
