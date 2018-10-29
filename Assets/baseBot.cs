@@ -23,7 +23,7 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// how close to other bots is too close
     /// </summary>
-    float personalBotSpace = 2;
+    public float personalBotSpace = 1;
     /// <summary>
     /// Maximum radius of players to consider. May be affected by bias/score
     /// </summary>
