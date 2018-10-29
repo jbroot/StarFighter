@@ -66,7 +66,6 @@ public class origBot : MonoBehaviour
             //no target found
             return;
         }
-
         //movement
         changeVelocity();
 
@@ -74,9 +73,6 @@ public class origBot : MonoBehaviour
         rotate();
 
         //predict enemy position over time
-
-        //if no enemies in range then choose a direction
-        //if edge of map change direction
     }
 
     /// <summary>
@@ -100,7 +96,7 @@ public class origBot : MonoBehaviour
     /// <returns></returns>
     bool findTarget()
     {
-        //sort players into grids
+        //maybe: sort players into grids
 
         //get enemies positions, velocity, etc
         //find closest enemy
@@ -170,6 +166,7 @@ public class origBot : MonoBehaviour
     /// <returns>float</returns>
     float findDegree(Vector2 dif)
     {
+        //Mathf.Atan2(dif.y, dif.x);
         //avoid division by 0
         if (dif[0] == 0)
         {
@@ -180,9 +177,9 @@ public class origBot : MonoBehaviour
         //arctan is always y/x in this case
         else
         {
-            float degree = -Mathf.Atan(dif[1] / dif[0]) * 180 / Mathf.PI;
-            if (dif[0] < 0) return degree + 90;
-            else return degree - 90;
+            float degree = Mathf.Atan(dif[1] / dif[0]) * 180 / Mathf.PI;
+            if (dif[0] < 0) return degree - 90;
+            else return degree + 90;
         }
     }
 
@@ -212,46 +209,27 @@ public class origBot : MonoBehaviour
 
     void rotate()
     {
-        //TODO: make rotation smoother
-
-
         //find desired angle
         float degreeToTarget = findDegree(transform.position - target.transform.position);
 
-        if (degreeToTarget < 0) degreeToTarget += 360;
-        // Get the Quaternion
-        Quaternion rot = transform.rotation;
-        //Get Z Euler Angles
-        float z = rot.eulerAngles.z;
-        
-        //Change Z angle based on target's position
-        float absDif = Mathf.Abs(degreeToTarget - z);
-        if (absDif >= 180)
-        {
-            if (degreeToTarget < z)
-            {
-                z += rotationSpeed * Time.deltaTime;
-            }
-            else
-            {
-                z -= rotationSpeed * Time.deltaTime;
-            }
-        }
-        else if (absDif < 180)
-        {
-            if (degreeToTarget > z)
-            {
-                z += rotationSpeed * Time.deltaTime;
-            }
-            else
-            {
-                z -= rotationSpeed * Time.deltaTime;
-            }
-        }
-        z = degreeToTarget;
-        rot = Quaternion.Euler(0, 0, -z);
+        transform.rotation = Quaternion.Euler(0, 0, degreeToTarget);
 
-        transform.rotation = rot;
+        /*
+        float z = transform.rotation.eulerAngles.z;
+
+        float rotationDist = z - degreeToTarget;
+
+        if((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
+        {
+            z = z - rotationSpeed * Time.deltaTime;
+        }
+        else if(rotationDist != 0)
+        {
+            z = z + rotationSpeed * Time.deltaTime;
+        }
+
+        transform.rotation = Quaternion.Euler(0, 0, z);
+        return;*/
     }
 
 }
