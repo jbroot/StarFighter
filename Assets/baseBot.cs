@@ -24,9 +24,21 @@ public class origBot : MonoBehaviour
     public int minXPosition = -5000;
     public int maxYPosition = 5000;
     public int minYPosition = -5000;
+    /// <summary>
+    /// max velocity for this bot
+    /// </summary>
     public float maxSpeed = 4.5f;
+    /// <summary>
+    /// What score is considered to be 100% in the score-bias search alternative
+    /// </summary>
     public int maxScore = 100000;
+    /// <summary>
+    /// TBD
+    /// </summary>
     float repulsion = 0.75f;
+    /// <summary>
+    /// speed allowed for rotation
+    /// </summary>
     public float rotationSpeed = 180f;
 
     /// <summary>
