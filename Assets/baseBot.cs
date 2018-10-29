@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class origBot : MonoBehaviour
+public class baseBot : MonoBehaviour
 {
 
     public float height = 1;
@@ -16,6 +16,14 @@ public class origBot : MonoBehaviour
     /// list of players to search
     /// </summary>
     public List<SpriteRenderer> players;
+    /// <summary>
+    /// list of bots to consider
+    /// </summary>
+    public List<SpriteRenderer> otherBots;
+    /// <summary>
+    /// how close to other bots is too close
+    /// </summary>
+    float personalBotSpace = 2;
     /// <summary>
     /// Maximum radius of players to consider. May be affected by bias/score
     /// </summary>
@@ -32,10 +40,6 @@ public class origBot : MonoBehaviour
     /// What score is considered to be 100% in the score-bias search alternative
     /// </summary>
     public int maxScore = 100000;
-    /// <summary>
-    /// TBD
-    /// </summary>
-    float repulsion = 0.75f;
     /// <summary>
     /// speed allowed for rotation
     /// </summary>
@@ -105,6 +109,23 @@ public class origBot : MonoBehaviour
 
         float frameMovement = newVelocity * Time.deltaTime;
         transform.position = Vector2.MoveTowards(transform.position, target.transform.position, frameMovement);
+
+        //consider other bots' positions
+        asocialBots();
+    }
+
+    /// <summary>
+    /// avoids being in the proximity of other bots
+    /// </summary>
+    void asocialBots()
+    {
+        foreach (SpriteRenderer bot in otherBots)
+        {
+            if (getMagnitude(bot.transform.position - transform.position) <= personalBotSpace)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime);
+            }
+        }
     }
 
     /// <summary>
