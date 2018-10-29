@@ -66,20 +66,12 @@ public class origBot : MonoBehaviour
             //no target found
             return;
         }
-        
-        //find desired angle
-        float degree = findDegree(transform.position - target.transform.position);
-        float magnitude = findVelocity();
 
-        //rotate and move bot
-        if (magnitude >= maxSpeed)
-        {
-            rotate(degree, maxSpeed);
-        }
-        else
-        {
-            rotate(degree, magnitude);
-        }
+        //movement
+        changeVelocity();
+
+        //rotate
+        rotate();
 
         //predict enemy position over time
 
@@ -88,18 +80,18 @@ public class origBot : MonoBehaviour
     }
 
     /// <summary>
-    /// Finds the desired velocity for this bot
+    /// Finds and changes the desired velocity for this bot
     /// </summary>
     /// <returns></returns>
-    float findVelocity()
+    void changeVelocity()
     {
         //slows down to reduce collision chance
         Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
         float newVelocity = getMagnitude(dif);
-        /*//adds some repulsion
-        newVelocity[0] -= repulsion;
-        newVelocity[1] -= repulsion;*/
-        return newVelocity;
+        if (newVelocity > maxSpeed) newVelocity = maxSpeed;
+
+        float frameMovement = newVelocity * Time.deltaTime;
+        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, frameMovement);
     }
 
     /// <summary>
@@ -202,7 +194,7 @@ public class origBot : MonoBehaviour
     /// <returns></returns>
     float getMagnitude(Vector2 dif)
     {
-        return Mathf.Pow(dif[0] * dif[0] + dif[1] * dif[1], (float)0.5);
+        return Mathf.Pow(dif[0] * dif[0] + dif[1] * dif[1], 0.5f);
     }
 
     /// <summary>
@@ -218,15 +210,20 @@ public class origBot : MonoBehaviour
         return origVector;
     }
 
-    void rotate(float degreeToTarget, float velocity)
+    void rotate()
     {
+        //TODO: make rotation smoother
+
+
+        //find desired angle
+        float degreeToTarget = findDegree(transform.position - target.transform.position);
+
         if (degreeToTarget < 0) degreeToTarget += 360;
         // Get the Quaternion
         Quaternion rot = transform.rotation;
         //Get Z Euler Angles
         float z = rot.eulerAngles.z;
-
-        rotationSpeed = 10;
+        
         //Change Z angle based on target's position
         float absDif = Mathf.Abs(degreeToTarget - z);
         if (absDif >= 180)
@@ -255,15 +252,6 @@ public class origBot : MonoBehaviour
         rot = Quaternion.Euler(0, 0, -z);
 
         transform.rotation = rot;
-
-        //proportinally allot velocity to x and y velocity vectors
-        GetComponent<Rigidbody2D>().velocity = new Vector2(velocity * Mathf.Sin(z), velocity * Mathf.Cos(z));
-
-        /*Vector2 currentPos = GetComponent<Rigidbody2D>().transform.position;
-        //proportinally allot velocity to x and y velocity vectors
-        GetComponent<Rigidbody2D>().transform.position = new Vector2(currentPos[0] + velocity * Mathf.Sin(z) * Time.deltaTime,
-            currentPos[1] + velocity * Mathf.Cos(z) * Time.deltaTime);*/
-        Debug.Log(GetComponent<Rigidbody2D>().velocity);
     }
 
 }
