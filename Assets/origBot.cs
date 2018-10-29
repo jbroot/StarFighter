@@ -6,23 +6,28 @@ using UnityEngine;
 public class origBot : MonoBehaviour
 {
 
-    public float height = 2;
+    public float height = 1;
     public float width = 1;
-    public Vector2 position = new Vector2(1, 0);
+    /// <summary>
+    /// initial position
+    /// </summary>
+    public Vector2 initialPosition = new Vector2(1, 0);
+    /// <summary>
+    /// list of players to search
+    /// </summary>
     public List<SpriteRenderer> players;
+    /// <summary>
+    /// Maximum radius of players to consider. May be affected by bias/score
+    /// </summary>
     public float radar = 30;
     public int maxXPosition = 5000;
     public int minXPosition = -5000;
     public int maxYPosition = 5000;
     public int minYPosition = -5000;
-    public float maxSpeed = 5;
+    public float maxSpeed = 4.5f;
     public int maxScore = 100000;
     float repulsion = 0.75f;
     public float rotationSpeed = 180f;
-    /// <summary>
-    /// default is maxSpeed/10
-    /// </summary>
-    public float acceleration = 0;
 
     /// <summary>
     /// sprite to target
@@ -37,28 +42,28 @@ public class origBot : MonoBehaviour
     /// </summary>
     private int[] softBounds;
 
-    // Use this for initialization
+    /// <summary>
+    /// initialization
+    /// </summary>
     void Start()
     {
         //scale the sprite
         transform.localScale = new Vector2(width, height);
         //spawn
-        transform.position = position;
+        transform.position = initialPosition;
         //rotate to 0 degrees
         Quaternion rotation = transform.localRotation;
         rotation.z = 0;
 
+        //initialize softBounds
         int boundDifference = 100;
         softBounds = new int[] {maxXPosition - boundDifference, minXPosition - boundDifference,
             maxYPosition - boundDifference, minYPosition - boundDifference};
-
-        if (acceleration == 0)
-        {
-            acceleration = maxSpeed / 10;
-        }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
     {
         if (!findTarget())
@@ -72,11 +77,11 @@ public class origBot : MonoBehaviour
         //rotate
         rotate();
 
-        //predict enemy position over time
+        //TODO: predict enemy position over time
     }
 
     /// <summary>
-    /// Finds and changes the desired velocity for this bot
+    /// Finds and changes the velocity for this bot
     /// </summary>
     /// <returns></returns>
     void changeVelocity()
@@ -104,7 +109,7 @@ public class origBot : MonoBehaviour
         float tempRadar = radar;
         foreach (SpriteRenderer player in players)
         {
-            //skip player if outside boundaries
+            //skip player if outside bots' boundaries
             if(player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
                 player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
             {
@@ -177,7 +182,7 @@ public class origBot : MonoBehaviour
         //arctan is always y/x in this case
         else
         {
-            float degree = Mathf.Atan(dif[1] / dif[0]) * 180 / Mathf.PI;
+            float degree = Mathf.Atan(dif[1] / dif[0]) * Mathf.Rad2Deg;
             if (dif[0] < 0) return degree - 90;
             else return degree + 90;
         }
@@ -207,6 +212,9 @@ public class origBot : MonoBehaviour
         return origVector;
     }
 
+    /// <summary>
+    /// rotates bot
+    /// </summary>
     void rotate()
     {
         //find desired angle
