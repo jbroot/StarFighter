@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour {
         //Feed Quaternion into our rotation
         transform.rotation = rot;
 
-        //Move the shio
+        //Move the ship
         Vector3 pos = transform.position;
 
         Vector3 vel = new Vector3(0, Input.GetAxis("Vertical") * maxSpeed * Time.deltaTime,0);

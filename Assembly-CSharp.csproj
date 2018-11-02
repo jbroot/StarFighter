@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\gamePlay\scripts\baseBot.cs" />
+     <Compile Include="Assets\gamePlay\scripts\drone.cs" />
+     <Compile Include="Assets\gamePlay\scripts\Energy.cs" />
+     <Compile Include="Assets\gamePlay\scripts\Health.cs" />
      <Compile Include="Assets\gamePlay\scripts\PlayerMovement.cs" />
      <Compile Include="Assets\highScores\scripts\top10.cs" />
  <Reference Include="UnityEditor.StandardEvents">

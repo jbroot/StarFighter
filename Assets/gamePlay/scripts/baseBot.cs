@@ -48,20 +48,20 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// sprite to target
     /// </summary>
-    private SpriteRenderer target;
+    protected SpriteRenderer target;
     /// <summary>
     /// score bias
     /// </summary>
-    private float maxBias = 0;
+    protected float maxBias = 0;
     /// <summary>
     /// [maxX, minX, maxY, minY] if no target is found then avoid this zone
     /// </summary>
-    private int[] softBounds;
+    protected int[] softBounds;
 
     /// <summary>
     /// initialization
     /// </summary>
-    void Start()
+    protected virtual void Start()
     {
         //scale the sprite
         transform.localScale = new Vector2(width, height);
@@ -80,18 +80,16 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// Update is called once per frame
     /// </summary>
-    void Update()
+    protected virtual void Update()
     {
         if (!findTarget())
         {
             //no target found
             return;
         }
-        //movement
-        changeVelocity();
 
-        //rotate
-        rotate();
+        //movement and rotation
+        changeVelocity();
 
         //TODO: predict enemy position over time
     }
@@ -100,24 +98,24 @@ public class baseBot : MonoBehaviour
     /// Finds and changes the velocity for this bot
     /// </summary>
     /// <returns></returns>
-    void changeVelocity()
+    protected virtual void changeVelocity()
     {
+        Quaternion rot = rotate();
         //slows down to reduce collision chance
         Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
         float newVelocity = getMagnitude(dif);
         if (newVelocity > maxSpeed) newVelocity = maxSpeed;
 
-        float frameMovement = newVelocity * Time.deltaTime;
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, frameMovement);
+        Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
+        transform.position += rot * frameMovement;
 
-        //consider other bots' positions
         asocialBots();
     }
 
     /// <summary>
     /// avoids being in the proximity of other bots
     /// </summary>
-    void asocialBots()
+    protected virtual void asocialBots()
     {
         foreach (SpriteRenderer bot in otherBots)
         {
@@ -133,7 +131,7 @@ public class baseBot : MonoBehaviour
     /// Finds target based on proximity. Returns false if no target is found
     /// </summary>
     /// <returns></returns>
-    bool findTarget()
+    protected virtual bool findTarget()
     {
         //maybe: sort players into grids
 
@@ -200,10 +198,11 @@ public class baseBot : MonoBehaviour
 
     /// <summary>
     /// Finds the degree for Vector1 to point to vector2 in vector1-vector2
+    /// Degree returned is [0,360)
     /// </summary>
     /// <param name="dif"></param>
     /// <returns>float</returns>
-    float findDegree(Vector2 dif)
+    protected virtual float findDegree(Vector2 dif)
     {
         //Mathf.Atan2(dif.y, dif.x);
         //avoid division by 0
@@ -217,8 +216,13 @@ public class baseBot : MonoBehaviour
         else
         {
             float degree = Mathf.Atan(dif[1] / dif[0]) * Mathf.Rad2Deg;
-            if (dif[0] < 0) return degree - 90;
-            else return degree + 90;
+            if (dif[0] < 0) degree -= 90;
+            else degree += 90;
+            while (degree < 0)
+            {
+                degree += 360;
+            }
+            return degree % 360;
         }
     }
 
@@ -228,7 +232,7 @@ public class baseBot : MonoBehaviour
     /// </summary>
     /// <param name="dif"></param>
     /// <returns></returns>
-    float getMagnitude(Vector2 dif)
+    protected virtual float getMagnitude(Vector2 dif)
     {
         return Mathf.Pow(dif[0] * dif[0] + dif[1] * dif[1], 0.5f);
     }
@@ -239,7 +243,7 @@ public class baseBot : MonoBehaviour
     /// </summary>
     /// <param name="origVector"></param>
     /// <returns>Vector2</returns>
-    Vector2 scalarTimesVector(float scalar, Vector2 origVector)
+    protected virtual Vector2 scalarTimesVector(float scalar, Vector2 origVector)
     {
         origVector[0] *= scalar;
         origVector[1] *= scalar;
@@ -249,29 +253,41 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// rotates bot
     /// </summary>
-    void rotate()
+    protected virtual Quaternion rotate()
     {
-        //find desired angle
+
+        // Get the Quaternion
+        Quaternion rot = transform.rotation;
+
+        //Get a Euler angle
+        float z = rot.eulerAngles.z % 360;
+
         float degreeToTarget = findDegree(transform.position - target.transform.position);
-
-        transform.rotation = Quaternion.Euler(0, 0, degreeToTarget);
-
-        /*
-        float z = transform.rotation.eulerAngles.z;
-
         float rotationDist = z - degreeToTarget;
 
-        if((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
+        if ((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
         {
             z = z - rotationSpeed * Time.deltaTime;
         }
-        else if(rotationDist != 0)
+        else if (rotationDist != 0)
         {
             z = z + rotationSpeed * Time.deltaTime;
         }
 
-        transform.rotation = Quaternion.Euler(0, 0, z);
-        return;*/
+        //Recreate the Quaternion
+        rot = Quaternion.Euler(0, 0, z);
+
+        //Feed Quaternion into our rotation
+        transform.rotation = rot;
+
+        return rot;
+
+
+        /*//find desired angle
+        float degreeToTarget = findDegree(transform.position - target.transform.position);
+
+        transform.rotation = Quaternion.Euler(0, 0, degreeToTarget);*/
+
     }
 
 }
