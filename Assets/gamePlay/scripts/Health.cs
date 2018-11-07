@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
 
-public class Health : MonoBehaviour {
+public class Health : MonoBehaviour
+{
 
-    public float CurrentHealth { get; set; }
+    public float CurrentHealth = 0f;
     public float MaxHealth =100f;
 
     public Slider HealthBar;
@@ -17,6 +18,12 @@ public class Health : MonoBehaviour {
 	    CurrentHealth = MaxHealth;
         UpdateHealthBar(HealthBar);
 	}
+
+    public void Respawn()
+    {
+        CurrentHealth = MaxHealth;
+        UpdateHealthBar(HealthBar);
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -41,6 +48,11 @@ public class Health : MonoBehaviour {
 	void Update () {
 	    if (CurrentHealth <= 0)
 	    {
+	        if (gameObject.GetComponent<Lives>() != null)
+	        {
+	            gameObject.GetComponent<Lives>().LoseALife();
+	            return;
+	        }
 	        Destroy(gameObject);
 	    }
 	}
