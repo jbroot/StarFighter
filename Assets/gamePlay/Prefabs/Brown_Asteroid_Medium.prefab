@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212854130062848060}
   - component: {fileID: 60966596510166824}
   - component: {fileID: 50446178480036506}
+  - component: {fileID: 114977973604830138}
   m_Layer: 0
   m_Name: Brown_Asteroid_Medium
   m_TagString: Untagged
@@ -92,6 +93,18 @@ PolygonCollider2D:
       - {x: -0.48220825, y: -0.07962787}
       - {x: -0.1909895, y: -0.45761052}
       - {x: 0.29971027, y: -0.39402524}
+--- !u!114 &114977973604830138
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1970390651784464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69be75fc2e2724d439e93fc440f7e585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aster: {fileID: 50446178480036506}
 --- !u!212 &212854130062848060
 SpriteRenderer:
   m_ObjectHideFlags: 1

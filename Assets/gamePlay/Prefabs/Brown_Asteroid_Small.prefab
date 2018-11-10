@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212955302854113432}
   - component: {fileID: 60514674087928862}
   - component: {fileID: 50037091507184746}
+  - component: {fileID: 114308163718185568}
   m_Layer: 0
   m_Name: Brown_Asteroid_Small
   m_TagString: Untagged
@@ -93,6 +94,18 @@ PolygonCollider2D:
       - {x: 0.22500038, y: 0.005244434}
       - {x: 0.20478916, y: 0.036373496}
       - {x: 0.088853836, y: 0.18209696}
+--- !u!114 &114308163718185568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1704049818854568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69be75fc2e2724d439e93fc440f7e585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aster: {fileID: 50037091507184746}
 --- !u!212 &212955302854113432
 SpriteRenderer:
   m_ObjectHideFlags: 1

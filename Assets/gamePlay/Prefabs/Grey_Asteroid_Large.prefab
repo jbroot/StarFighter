@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212796616452579662}
   - component: {fileID: 60243747880993142}
   - component: {fileID: 50272381431748660}
+  - component: {fileID: 114129264510428546}
   m_Layer: 0
   m_Name: Grey_Asteroid_Large
   m_TagString: Untagged
@@ -95,6 +96,18 @@ PolygonCollider2D:
       - {x: -0.22343922, y: -0.563099}
       - {x: -0.04889202, y: -0.4052087}
       - {x: 0.48576927, y: -0.25936282}
+--- !u!114 &114129264510428546
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1768577149094250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69be75fc2e2724d439e93fc440f7e585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aster: {fileID: 50272381431748660}
 --- !u!212 &212796616452579662
 SpriteRenderer:
   m_ObjectHideFlags: 1

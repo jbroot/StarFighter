@@ -53,8 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Asteroid_Movement.cs" />
-     <Compile Include="Assets\Asteroid_Spawner.cs" />
+     <Compile Include="Assets\gamePlay\scripts\Asteroid_Movement.cs" />
+     <Compile Include="Assets\gamePlay\scripts\Asteroid_Spawner.cs" />
      <Compile Include="Assets\gamePlay\scripts\baseBot.cs" />
      <Compile Include="Assets\gamePlay\scripts\drone.cs" />
      <Compile Include="Assets\gamePlay\scripts\Energy.cs" />
@@ -62,7 +62,6 @@
      <Compile Include="Assets\gamePlay\scripts\Lives.cs" />
      <Compile Include="Assets\gamePlay\scripts\PlayerMovement.cs" />
      <Compile Include="Assets\highScores\scripts\top10.cs" />
-     <Compile Include="Assets\scr.cs" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/Josh/Documents/Unity Projects/semesterproject-group-1/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
