@@ -351,18 +351,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 'OBJECTIVE: To accrue as many points as possible by destroying asteroids,
-    other players and enemies before your inevitable demise.
-
-
-    CONTROLS: Use arrow keys to control navigation and direction. To shoot use another
-    key.
-
-
-    Game Ends when either you quit by selecting the QUIT button or you are destroyed.
-
-
-'
+  m_text: "OBJECTIVE: To accrue as many points as possible by destroying asteroids,
+    other players and enemies before your inevitable demise.\n\nCONTROLS: Use arrow
+    keys to control navigation and direction. \nUP - forward\nDOWN - backwards\nLEFT
+    AND RIGHT - LEFT AND RIGHT RESPECTIVELY\nCTRL - shoot FORWARD\n\nGame Ends when
+    either you quit by selecting the QUIT button or you are destroyed.\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -430,12 +423,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 271129782}
-    characterCount: 303
+    characterCount: 374
     spriteCount: 0
-    spaceCount: 51
-    wordCount: 48
+    spaceCount: 65
+    wordCount: 61
     linkCount: 0
-    lineCount: 10
+    lineCount: 13
     pageCount: 1
     materialCount: 1
   m_havePropertiesChanged: 0
