@@ -46,7 +46,6 @@ public class Health : MonoBehaviour
 
 	// Update is called once per frame
 	void Update () {
-        Boom(gameObject);
         if (CurrentHealth <= 0)
 	    {
 	        if (gameObject.GetComponent<Lives>() != null)
