@@ -53,7 +53,12 @@ public class Health : MonoBehaviour
 	            gameObject.GetComponent<Lives>().LoseALife();
 	            return;
 	        }
-	        Destroy(gameObject);
+	        Boom(gameObject);
 	    }
 	}
+    void Boom(GameObject ship)
+    {
+        GetComponent<SpriteRenderer>().sprite = Resources.Load("Assets/Universal/boom1") as Sprite;
+        //Destroy(ship);
+    }
 }
