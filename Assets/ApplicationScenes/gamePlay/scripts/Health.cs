@@ -46,7 +46,8 @@ public class Health : MonoBehaviour
 
 	// Update is called once per frame
 	void Update () {
-	    if (CurrentHealth <= 0)
+        Boom(gameObject);
+        if (CurrentHealth <= 0)
 	    {
 	        if (gameObject.GetComponent<Lives>() != null)
 	        {
@@ -58,7 +59,9 @@ public class Health : MonoBehaviour
 	}
     void Boom(GameObject ship)
     {
-        GetComponent<SpriteRenderer>().sprite = Resources.Load("Assets/Universal/boom1") as Sprite;
+        var pos = GetComponent<Rigidbody2D>().position;
+        GetComponent<SpriteRenderer>().sprite = Resources.Load("Assets/Universal/boom1.prefab") as Sprite;
+        GetComponent<Rigidbody2D>().position = pos;
         //Destroy(ship);
     }
 }
