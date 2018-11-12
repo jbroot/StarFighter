@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour {
         float xAxis = Input.GetAxis("Horizontal");
 
         ThrustForward(yAxis);
-        Rotate(transform, xAxis * -rotationSpeed);
+        Rotate(transform, xAxis * -rotationSpeed * Time.deltaTime);
     }
 
 

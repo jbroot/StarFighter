@@ -668,6 +668,48 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!1001 &1092529459
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 19.911804
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 7.7486477
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 12.095315
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291257265936630, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e1ee2c242db4b484eaeeb909abbb4ba3, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &1137555027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,7 +1091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2d5d552696edf48a16dcc081ce7a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxVelocity: 5
   rotationSpeed: 180
 --- !u!50 &1479890620
 Rigidbody2D:
