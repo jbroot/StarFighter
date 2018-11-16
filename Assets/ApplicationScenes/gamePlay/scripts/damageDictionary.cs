@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class damageDictionary : MonoBehaviour {
+public static class damageDictionary : MonoBehaviour {
 
-    public Dictionary<string, double> damages = new Dictionary<string, double>();
+    /// <summary>
+    /// (Sprite's tag, damage)
+    /// </summary>
+    public static Dictionary<string, double> damages = new Dictionary<string, double>();
 
 	// Use this for initialization
 	void Start () {
-        damages.Add("baseBotContact", 20);
-        damages.Add("droneContact", 30);
-        damages.Add("playerContact", 20);
-        damages.Add("spawnerContact", 40);
-        damages.Add("baseLaser", 10);
+        damages.Add("BaseBot", 20);
+        damages.Add("Drone", 30);
+        damages.Add("Player", 20);
+        damages.Add("Spawner", 40);
+        damages.Add("BaseLaser", 10);
 	}
 }
