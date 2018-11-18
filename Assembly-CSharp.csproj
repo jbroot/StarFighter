@@ -72,6 +72,7 @@
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Lives.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\PlayerMovement.cs" />
     <Compile Include="Assets\ApplicationScenes\highScores\scripts\HighScoresOptions.cs" />
+    <Compile Include="Assets\ApplicationScenes\highScores\scripts\Score.cs" />
     <Compile Include="Assets\ApplicationScenes\highScores\scripts\top10.cs" />
     <Compile Include="Assets\ApplicationScenes\InstructionsMenu\Scripts\InstructionMenuOptions.cs" />
     <Compile Include="Assets\ApplicationScenes\MainMenu\Scripts\MainMenu.cs" />

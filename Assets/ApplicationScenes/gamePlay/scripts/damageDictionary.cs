@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class damageDictionary : MonoBehaviour {
+public class damageDictionary : MonoBehaviour {
 
     /// <summary>
     /// (Sprite's tag, damage)
     /// </summary>
-    public static Dictionary<string, double> damages = new Dictionary<string, double>();
+    public Dictionary<string, double> damages = new Dictionary<string, double>();
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
         damages.Add("BaseBot", 20);
         damages.Add("Drone", 30);
         damages.Add("Player", 20);
