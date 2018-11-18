@@ -63,6 +63,10 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void Start()
     {
+        //hide exit options menu by default on start
+        ExitGame exitGame = new ExitGame();
+        exitGame.CloseExitConfirmationMenu();
+
         //scale the sprite
         transform.localScale = new Vector2(width, height);
         //spawn
