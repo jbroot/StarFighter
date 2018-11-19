@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;  
+using System.Collections.Generic;
+using TMPro;
 
 public class top10 : MonoBehaviour {
 
@@ -15,7 +16,7 @@ public class top10 : MonoBehaviour {
     }
 
     public void DisplayTopTenHighestScores(){
-        Text scoresBox = GameObject.Find("scoresBox").GetComponent<Text>();
+        TextMeshProUGUI scoresBox = GameObject.Find("scoresBox").GetComponent<TextMeshProUGUI>();
         scoresBox.text = "";
         for (int i = 0; i < 10; i++)
         {
@@ -27,7 +28,7 @@ public class top10 : MonoBehaviour {
 
     public void DisplayTopTenHighestScoresNames()
     {
-        Text namesBox = GameObject.Find("namesBox").GetComponent<Text>();
+        TextMeshProUGUI namesBox = GameObject.Find("namesBox").GetComponent<TextMeshProUGUI>();
         namesBox.text = "";
         for (int i = 0; i < 10; i++)
         {
