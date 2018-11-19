@@ -1,62 +1,55 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using TMPro;
 
 public class top10 : MonoBehaviour {
+    private string URL = "http://spacefighterweb.azurewebsites.net/api/scores";
+    private List<Score> scoresList = new List<Score>();
 
-    private List<Score> scoresInOrder = new List<Score>();
-
-	// Use this for initialization
-    public void Start() {
-        AddDummyDataToHighScores(); //TODO: Replace with data retrieved from the database
-        SortScoresHighestToLowest();
-        DisplayTopTenHighestScoresNames();
-        DisplayTopTenHighestScores();
+    // Use this for initialization
+    public void Start()
+    {
+        StartCoroutine(GetScores());
     }
 
-    public void DisplayTopTenHighestScores(){
-        TextMeshProUGUI scoresBox = GameObject.Find("scoresBox").GetComponent<TextMeshProUGUI>();
-        scoresBox.text = "";
-        for (int i = 0; i < 10; i++)
+    public IEnumerator GetScores()
+    {
+        UnityWebRequest webapi = UnityWebRequest.Get(URL);
+        yield return webapi.SendWebRequest();
+
+        if (webapi.isNetworkError || webapi.isHttpError)
         {
-            Score s = (Score)scoresInOrder[i];
-            int score = s.TotalPoints;
-            scoresBox.text += score.ToString() + "\n";
+            Debug.Log(webapi.error);
+        }
+        else
+        {
+            LoadScoresList(webapi.downloadHandler.text);
+            DisplayScores();
         }
     }
 
-    public void DisplayTopTenHighestScoresNames()
+    public void LoadScoresList(string data)
+    {
+        var trimmedString = data.Substring(1, data.Length - 2);
+        var elements = trimmedString.Split(',');
+        for (int n = 0; n < elements.Length; n += 2)
+        {
+            scoresList.Add(new Score(elements[n].Replace("\"", " "), int.Parse(elements[n + 1].Replace("\"", " "))));
+        }
+    }
+
+    public void DisplayScores()
     {
         TextMeshProUGUI namesBox = GameObject.Find("namesBox").GetComponent<TextMeshProUGUI>();
         namesBox.text = "";
-        for (int i = 0; i < 10; i++)
+        TextMeshProUGUI scoresBox = GameObject.Find("scoresBox").GetComponent<TextMeshProUGUI>();
+        scoresBox.text = "";
+        foreach (var s in scoresList)
         {
-            Score s = (Score)scoresInOrder[i];
-            string username = s.Username;
-            namesBox.text += username + "\n";
+            namesBox.text += string.Format("{0}\n", s.Username);
+            scoresBox.text += string.Format("{0}\n", s.TotalPoints);
         }
     }
-
-    private void AddDummyDataToHighScores(){
-        string[] names = new string[10]{"Zeus", "Muhammad", "Washington", "Jo", "Jane", "Jax", "noob123",
-        "Orange Man", "Cheater", "King Kong" };
-        int[] scores = new int[10] { 1000, 30000, 500, 70, 8000, 600000, 0, 7770, 990, 10 };
-
-        for (int i = 0; i < 10; i++){
-            Score s = new Score(names[i], scores[i]);
-            scoresInOrder.Add(s);
-        }
-
-    }
-
-    private void SortScoresHighestToLowest(){
-        scoresInOrder.Sort();
-        scoresInOrder.Reverse();
-    }
-
-    public void AddNewScore(string username, int score){
-        Score s = new Score(username, score);
-        scoresInOrder.Add(s);
-    } 
 }
