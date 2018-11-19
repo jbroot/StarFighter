@@ -1092,7 +1092,6 @@ GameObject:
   - component: {fileID: 1799365308}
   - component: {fileID: 1799365311}
   - component: {fileID: 1799365310}
-  - component: {fileID: 1799365309}
   m_Layer: 5
   m_Name: highScoreBackground
   m_TagString: Untagged
@@ -1118,17 +1117,6 @@ RectTransform:
   m_AnchoredPosition: {x: 12, y: -80}
   m_SizeDelta: {x: 500, y: 464.5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1799365309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1799365307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6c66135dbda7f84a86bb98547b6d1c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1799365310
 MonoBehaviour:
   m_ObjectHideFlags: 0
