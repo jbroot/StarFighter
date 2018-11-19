@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ApplicationScenes/MainMenu/Scenes/MainMenu.unity
+- path: Assets/ApplicationScenes/highScores/Scenes/highScore.unity
   isLoaded: 1
   isActive: 1
