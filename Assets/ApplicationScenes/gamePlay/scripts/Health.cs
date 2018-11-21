@@ -35,16 +35,16 @@ public class Health : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         MostRecentCollision = collision;
-        TakeDamage(collision.gameObject.name);
+        TakeDamage(collision.gameObject.tag);
         if (HealthBar != null)
         {
             UpdateHealthBar(HealthBar);
         }
     }
 
-    void TakeDamage(string collidingObjectName)
+    void TakeDamage(string collidingObjectTag)
     {
-        CurrentHealth -= (int) DmgDictionary.damages[collidingObjectName];
+        CurrentHealth -= (int) DmgDictionary.damages[collidingObjectTag];
     }
 
     void UpdateHealthBar(Slider healthBar)
