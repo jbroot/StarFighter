@@ -4,19 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
-    public string shipColor = "red";
 
     public void PlayGame(){
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         SceneManager.LoadScene(1);
-    }
-
-    public void UpdateSelectedShipColor(string selectedShipColor){
-        shipColor = selectedShipColor;
-    }
-
-    public string GetShipColor(){
-        return shipColor;
     }
 
     public void GoToHighScoresMenu()
