@@ -14,8 +14,8 @@ public class PlayerScore : MonoBehaviour
 	    CurrentScore = 0;
 	}
 
-    public void AddScore(string DestroyedObjectName)
+    public void AddScore(string DestroyedObjectTag)
     {
-        CurrentScore += (int) scoresDictionary.scores[DestroyedObjectName];
+        CurrentScore += (int) scoresDictionary.scores[DestroyedObjectTag];
     }
 }

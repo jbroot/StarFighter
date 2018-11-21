@@ -25,7 +25,7 @@ public class Lives : MonoBehaviour
         {
             if (CollidedObject.gameObject.GetComponentInParent<PlayerScore>() != null)
             {
-                CollidedObject.gameObject.GetComponentInParent<PlayerScore>().AddScore(CollidedObject.gameObject.name);
+                CollidedObject.gameObject.GetComponentInParent<PlayerScore>().AddScore(CollidedObject.gameObject.tag);
             }
             Destroy(gameObject);
         }
