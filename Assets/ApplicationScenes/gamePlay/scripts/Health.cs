@@ -13,17 +13,12 @@ public class Health : MonoBehaviour
     public float MaxHealth = 100f;
 
     public Slider HealthBar;
-    public Collision2D MostRecentCollision;
-    public damageDictionary DmgDictionary;
 
     // Use this for initialization
     void Start()
     {
         CurrentHealth = MaxHealth;
-        if (HealthBar != null)
-        {
-            UpdateHealthBar(HealthBar);
-        }
+        UpdateHealthBar(HealthBar);
     }
 
     public void Respawn()
@@ -34,17 +29,16 @@ public class Health : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        MostRecentCollision = collision;
-        TakeDamage(collision.gameObject.tag);
-        if (HealthBar != null)
-        {
-            UpdateHealthBar(HealthBar);
-        }
+        TakeDamage(collision.gameObject.name);
+        UpdateHealthBar(HealthBar);
     }
 
-    void TakeDamage(string collidingObjectTag)
+    void TakeDamage(string collidingObjectName)
     {
-        CurrentHealth -= (int) DmgDictionary.damages[collidingObjectTag];
+        if (collidingObjectName == "bot" || collidingObjectName == "bot (1)")
+        {
+            CurrentHealth -= 25;
+        }
     }
 
     void UpdateHealthBar(Slider healthBar)
@@ -59,7 +53,7 @@ public class Health : MonoBehaviour
         {
             if (gameObject.GetComponent<Lives>() != null)
             {
-                gameObject.GetComponent<Lives>().LoseALife(MostRecentCollision);
+                gameObject.GetComponent<Lives>().LoseALife();
                 return;
             }
             Boom(gameObject);
