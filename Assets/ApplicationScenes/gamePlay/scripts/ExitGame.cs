@@ -12,12 +12,12 @@ public class ExitGame : MonoBehaviour {
 
     public void CloseExitConfirmationMenu(){
         GameObject exitConfirmationMenu = GameObject.Find("ExitConfirmationMenu");
-        exitConfirmationMenu.SetActive(false);
+        //exitConfirmationMenu.SetActive(false);
     }
     public void ShowExitConfirmationMenu()
     {
         GameObject exitConfirmationMenu = GameObject.Find("ExitConfirmationMenu");
-        exitConfirmationMenu.SetActive(true);
+        //exitConfirmationMenu.SetActive(true);
     }
 
 }
