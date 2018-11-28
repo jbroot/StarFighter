@@ -18,18 +18,13 @@ public class Lives : MonoBehaviour
 	    CurrentLives = StartingLives;
 	}
 
-    public void LoseALife(Collision2D CollidedObject)
+    public void LoseALife()
     {
         CurrentLives -= 1;       
         if (CurrentLives < 0)
         {
-            if (CollidedObject.gameObject.GetComponentInParent<PlayerScore>() != null)
-            {
-                CollidedObject.gameObject.GetComponentInParent<PlayerScore>().AddScore(CollidedObject.gameObject.tag);
-            }
             Destroy(gameObject);
         }
-        RemainingLivesText.text = "Lives: " + CurrentLives;
         gameObject.GetComponent<Health>().Respawn();
     }
 
@@ -41,6 +36,9 @@ public class Lives : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    
-	}
+		if (RemainingLivesText != null)
+		{
+			RemainingLivesText.text = "Lives: " + CurrentLives;
+		}
+    }
 }
