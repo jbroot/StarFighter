@@ -66,12 +66,16 @@
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\baseBot.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\CameraFollowsPlayer.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\damageDictionary.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\DamageHandler.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\drone.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Energy.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\ExitGame.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Health.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Lives.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\MoveForward.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\PlayerMovement.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\PlayerShooter.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\SelfDestruct.cs" />
     <Compile Include="Assets\ApplicationScenes\highScores\scripts\HighScoresOptions.cs" />
     <Compile Include="Assets\ApplicationScenes\highScores\scripts\Score.cs" />
     <Compile Include="Assets\ApplicationScenes\highScores\scripts\top10.cs" />
