@@ -7,6 +7,14 @@ using UnityEngine.UI;
 
 public class ExitGame : MonoBehaviour {
 
+    public void Start()
+    {
+        //hide exit options menu by default on start
+        CloseExitConfirmationMenu();
+        //hide username menu on start
+        CloseGetUsernameMenu();
+    }
+
     public void GoToMainMenu(){
         SceneManager.LoadScene(0);
     }
@@ -17,39 +25,66 @@ public class ExitGame : MonoBehaviour {
 
     public void CloseExitConfirmationMenu(){
         GameObject exitConfirmationMenu = GameObject.Find("ExitConfirmationMenu");
-        exitConfirmationMenu.SetActive(false);
+        if(exitConfirmationMenu != null && exitConfirmationMenu.activeSelf){
+            exitConfirmationMenu.SetActive(false);
+        }
     }
     public void ShowExitConfirmationMenu(){
         GameObject exitConfirmationMenu = GameObject.Find("ExitConfirmationMenu");
-        exitConfirmationMenu.SetActive(true);
+        if (exitConfirmationMenu != null && !exitConfirmationMenu.activeSelf)
+        {
+            exitConfirmationMenu.SetActive(true);
+        }
+    }
+
+    public void CloseGetUsernameMenu()
+    {
+        GameObject unameMenu = GameObject.Find("UsernameMenu");
+        if (unameMenu != null && unameMenu.activeSelf == true){
+            unameMenu.SetActive(false);
+        }
     }
 
     public void DisplayGetUsernameMenu(){
-        GameObject unameMenu = GameObject.Find("EnterUsername");
-        unameMenu.SetActive(true);
-        HideErrorMessage();
+        GameObject unameMenu = GameObject.Find("UsernameMenu");
+        if (unameMenu != null && !unameMenu.activeSelf)
+        {
+            unameMenu.SetActive(true);
+            HideErrorMessage();
+        }
     }
 
-    public void HideErrorMessage(){
+    public void HideErrorMessage()
+    {
         TextMeshProUGUI errorText = GameObject.Find("ErrorMessageText").GetComponent<TextMeshProUGUI>();
-        errorText.enabled = false;
-        errorText.text = "";
+        if (errorText != null){
+            errorText.SetText("");
+        }
     }
 
     public void DisplayErrorMessage(){
         TextMeshProUGUI errorText = GameObject.Find("ErrorMessageText").GetComponent<TextMeshProUGUI>();
-        errorText.enabled = true;
-        //errorText.text = "";
+        if(errorText != null)
+        {
+            errorText.SetText("USERNAME IS REQUIRED");
+        }
+
     }
 
     public void ValidateUsernameEntered(){
-        InputField usernameInput = GetComponent<InputField>();
+        GameObject usernameInputGO = GameObject.Find("UsernameInputField");
+        InputField usernameInput = usernameInputGO.GetComponent<InputField>();
         string uname = usernameInput.text;
+        //TODO get score 
+        int score = 0;
 
         if(uname.Length > 0){
             HideErrorMessage();
-            CloseGetUsernameMenu();
-            SaveUsernameAndScore();
+            //CloseGetUsernameMenu();
+            SaveUsernameAndScore(uname, score);
+            ShowExitConfirmationMenu();
+            DisplayGetUsernameMenu();
+            EnableQuitButton();
             GoToHighScoresMenu();
         }
         else{
@@ -57,13 +92,14 @@ public class ExitGame : MonoBehaviour {
         }
     }
 
-    public void CloseGetUsernameMenu(){
-        GameObject unameMenu = GameObject.Find("EnterUsername");
-        unameMenu.SetActive(false);
+    public void EnableQuitButton(){
+        GameObject exitBtn = GameObject.Find("Quit");
+        Button quitButton = exitBtn.GetComponent<Button>();
+        quitButton.enabled = true;
+        quitButton.IsActive();
     }
 
-
-    public void SaveUsernameAndScore(){
+    public void SaveUsernameAndScore(string username, int score){
         //TODO
     }
 }
