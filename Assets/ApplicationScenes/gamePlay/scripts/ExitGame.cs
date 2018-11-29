@@ -92,6 +92,10 @@ public class ExitGame : MonoBehaviour {
         }
     }
 
+    public void EndOfGame(){
+        DisplayGetUsernameMenu();
+    }
+
     public void EnableQuitButton(){
         GameObject exitBtn = GameObject.Find("Quit");
         Button quitButton = exitBtn.GetComponent<Button>();
