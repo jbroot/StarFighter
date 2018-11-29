@@ -46,6 +46,7 @@ public class ExitGame : MonoBehaviour {
     }
 
     public void DisplayGetUsernameMenu(){
+        DisableQuitButton();
         GameObject unameMenu = GameObject.Find("UsernameMenu");
         if (unameMenu != null && !unameMenu.activeSelf)
         {
@@ -93,6 +94,7 @@ public class ExitGame : MonoBehaviour {
     }
 
     public void EndOfGame(){
+        DisableQuitButton();
         DisplayGetUsernameMenu();
     }
 
@@ -101,6 +103,13 @@ public class ExitGame : MonoBehaviour {
         Button quitButton = exitBtn.GetComponent<Button>();
         quitButton.enabled = true;
         quitButton.IsActive();
+    }
+
+    public void DisableQuitButton()
+    {
+        GameObject exitBtn = GameObject.Find("Quit");
+        Button quitButton = exitBtn.GetComponent<Button>();
+        quitButton.enabled = false;
     }
 
     public void SaveUsernameAndScore(string username, int score){
