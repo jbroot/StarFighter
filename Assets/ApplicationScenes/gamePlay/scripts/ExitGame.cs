@@ -46,12 +46,12 @@ public class ExitGame : MonoBehaviour {
     }
 
     public void DisplayGetUsernameMenu(){
-        DisableQuitButton();
         GameObject unameMenu = GameObject.Find("UsernameMenu");
-        if (unameMenu != null && !unameMenu.activeSelf)
+        if (unameMenu != null)
         {
             unameMenu.SetActive(true);
             HideErrorMessage();
+           // DisableQuitButton();
         }
     }
 
