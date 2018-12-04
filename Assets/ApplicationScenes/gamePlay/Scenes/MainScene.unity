@@ -2056,8 +2056,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1265813982}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.65, y: -0.03, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5, y: -0.03, z: 0}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -2093,22 +2093,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e81af28dc9f8e5548b6105a4efd656e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: 1
-  width: 1
-  initialPosition: {x: -2, y: -1}
+  shootSound: {fileID: 8300000, guid: aac513c8f22ac4aabbcc04194e8706e7, type: 3}
+  boom: {fileID: 21300000, guid: 1f2073fe0300bbf449b27a5d670f40a0, type: 3}
+  health: 10
+  initialPosition: {x: -5, y: -1}
   players:
   - {fileID: 1479890617}
   otherBots:
   - {fileID: 1584686961}
   personalBotSpace: 1
   radar: 30
+  bulletPrefab: {fileID: 1509951547764742, guid: 7ba84d50e4d7b324480da9597613e2ca,
+    type: 2}
   maxXPosition: 5000
   minXPosition: -5000
   maxYPosition: 5000
   minYPosition: -5000
-  maxSpeed: 4.2
+  maxVelocity: 3
   maxScore: 100000
   rotationSpeed: 180
+  fireDelay: 0.25
+  acceleration: 100
+  botHealth: 10
 --- !u!1 &1305357949
 GameObject:
   m_ObjectHideFlags: 0
@@ -2758,7 +2764,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1584686960}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.14, y: 0.09, z: 0}
+  m_LocalPosition: {x: 5, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2795,22 +2801,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8aa159c3172ea4e93964cfadec35fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: 1
-  width: 1
+  shootSound: {fileID: 8300000, guid: aac513c8f22ac4aabbcc04194e8706e7, type: 3}
+  boom: {fileID: 21300000, guid: 520f601994dc6654fa4e964c558e3a5b, type: 3}
+  health: 50
   initialPosition: {x: 1, y: 0}
   players:
   - {fileID: 1479890617}
   otherBots:
-  - {fileID: 1265813984}
+  - {fileID: 212995576207019538, guid: 7ba84d50e4d7b324480da9597613e2ca, type: 2}
   personalBotSpace: 1
   radar: 30
+  bulletPrefab: {fileID: 1509951547764742, guid: 7ba84d50e4d7b324480da9597613e2ca,
+    type: 2}
   maxXPosition: 5000
   minXPosition: -5000
   maxYPosition: 5000
   minYPosition: -5000
-  maxSpeed: 4
+  maxVelocity: 4.5
   maxScore: 100000
   rotationSpeed: 100
+  fireDelay: 0.25
 --- !u!1 &1623716717
 GameObject:
   m_ObjectHideFlags: 0
