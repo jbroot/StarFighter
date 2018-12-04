@@ -4,8 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class ExitGame : MonoBehaviour {
+
+    private string URL = "http://spacefighterweb.azurewebsites.net/api/scores";
 
     public void Start()
     {
@@ -112,7 +115,21 @@ public class ExitGame : MonoBehaviour {
         quitButton.enabled = false;
     }
 
-    public void SaveUsernameAndScore(string username, int score){
-        //TODO
+    public void SaveUsernameAndScore(string username, int score)
+    {
+        StartCoroutine(PutScore(username, score));
     }
+
+    public IEnumerator PutScore(string username, int score)
+    {
+        //just format the score string variable with <usermame>|<score> (the pipe character is mandatory)
+        var body = string.Format("{0}|{1}", username, score);
+        UnityWebRequest webapi = UnityWebRequest.Put(URL, body);
+        yield return webapi.SendWebRequest();
+        if (webapi.isNetworkError || webapi.isHttpError)
+        {
+            Debug.Log(webapi.error);
+        }
+    }
+
 }
