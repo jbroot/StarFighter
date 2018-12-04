@@ -17,11 +17,7 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// The bot's health
     /// </summary>
-    public float health = 50;
-    /// <summary>
-    /// initial position
-    /// </summary>
-    public Vector2 initialPosition = new Vector2(1, 0);
+    public float health = 100;
     /// <summary>
     /// list of players to search
     /// </summary>
@@ -58,11 +54,15 @@ public class baseBot : MonoBehaviour
     /// speed allowed for rotation
     /// </summary>
     public float rotationSpeed = 180f;
+    /// <summary>
+    /// How long to delay between shots
+    /// </summary>
+    public float fireDelay = 1f;
     #endregion
 
     #region protected attributes
     protected AudioSource source { get { return GetComponent<AudioSource>(); } }
-    protected damageDictionary damage;
+    protected damageDictionary damageDictionary;
     /// <summary>
     /// sprite to target
     /// </summary>
@@ -75,10 +75,6 @@ public class baseBot : MonoBehaviour
     /// [maxX, minX, maxY, minY] if no target is found then avoid this zone
     /// </summary>
     protected int[] softBounds;
-    /// <summary>
-    /// How long to delay between shots
-    /// </summary>
-    public float fireDelay = 0.5f;
     /// <summary>
     /// Fire ready when cooldownTimer == 0
     /// </summary>
@@ -94,8 +90,8 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void Start()
     {
-        //spawn
-        transform.position = initialPosition;
+        damageDictionary = new damageDictionary();
+        
         //rotate to 0 degrees
         Quaternion rotation = transform.localRotation;
         rotation.z = 0;
@@ -325,8 +321,7 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void shoot()
     {
-        if (cooldownTimer > 0) return;
-
+        //Debug.Log(cooldownTimer);
         cooldownTimer = fireDelay;
         Vector3 offset = transform.rotation * new Vector3(0, 0.5f, 0);
         Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
@@ -354,7 +349,7 @@ public class baseBot : MonoBehaviour
         }
 
         //if within range then shoot
-        if (transform.rotation.eulerAngles.z <= maxDegree && transform.rotation.eulerAngles.z >= minDegree)
+        if (cooldownTimer <= 0 && transform.rotation.eulerAngles.z <= maxDegree && transform.rotation.eulerAngles.z >= minDegree)
         {
             shoot();
         }
@@ -365,13 +360,13 @@ public class baseBot : MonoBehaviour
     /// </summary>
     /// <param name="collision"></param>
     /// <returns></returns>
-    protected virtual IEnumerable OnCollisionEnter2D(Collision2D collision)
+    protected void OnCollisionEnter2D(Collision2D collision)
     {
-        health -= damage.damages[collision.gameObject.tag];
+        health -= damageDictionary.damages[collision.gameObject.tag];
         if (health <= 0)
         {
             GetComponent<SpriteRenderer>().sprite = boom;
-            yield return new WaitForSeconds(1.5f);
+            //yield return new WaitForSeconds(1.5f);
             Destroy(gameObject);
         }
     }
