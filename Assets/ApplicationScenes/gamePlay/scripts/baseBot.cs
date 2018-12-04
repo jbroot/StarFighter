@@ -5,9 +5,19 @@ using UnityEngine;
 
 public class baseBot : MonoBehaviour
 {
-
-    public float height = 1;
-    public float width = 1;
+    #region public attributes
+    /// <summary>
+    /// The laser sound
+    /// </summary>
+    public AudioClip shootSound;
+    /// <summary>
+    /// The sprite for death animation
+    /// </summary>
+    public Sprite boom;
+    /// <summary>
+    /// The bot's health
+    /// </summary>
+    public float health = 50;
     /// <summary>
     /// initial position
     /// </summary>
@@ -28,6 +38,10 @@ public class baseBot : MonoBehaviour
     /// Maximum radius of players to consider. May be affected by bias/score
     /// </summary>
     public float radar = 30;
+    /// <summary>
+    /// Laser that is shot
+    /// </summary>
+    public GameObject bulletPrefab;
     public int maxXPosition = 5000;
     public int minXPosition = -5000;
     public int maxYPosition = 5000;
@@ -35,7 +49,7 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// max velocity for this bot
     /// </summary>
-    public float maxSpeed = 4.5f;
+    public float maxVelocity = 4.5f;
     /// <summary>
     /// What score is considered to be 100% in the score-bias search alternative
     /// </summary>
@@ -44,7 +58,11 @@ public class baseBot : MonoBehaviour
     /// speed allowed for rotation
     /// </summary>
     public float rotationSpeed = 180f;
+    #endregion
 
+    #region protected attributes
+    protected AudioSource source { get { return GetComponent<AudioSource>(); } }
+    protected damageDictionary damage;
     /// <summary>
     /// sprite to target
     /// </summary>
@@ -57,14 +75,25 @@ public class baseBot : MonoBehaviour
     /// [maxX, minX, maxY, minY] if no target is found then avoid this zone
     /// </summary>
     protected int[] softBounds;
+    /// <summary>
+    /// How long to delay between shots
+    /// </summary>
+    public float fireDelay = 0.5f;
+    /// <summary>
+    /// Fire ready when cooldownTimer == 0
+    /// </summary>
+    protected float cooldownTimer = 0;
+    /// <summary>
+    /// Desired degree
+    /// </summary>
+    protected float degreeToTarget = 0;
+    #endregion
 
     /// <summary>
     /// initialization
     /// </summary>
     protected virtual void Start()
     {
-        //scale the sprite
-        transform.localScale = new Vector2(width, height);
         //spawn
         transform.position = initialPosition;
         //rotate to 0 degrees
@@ -75,6 +104,11 @@ public class baseBot : MonoBehaviour
         int boundDifference = 100;
         softBounds = new int[] {maxXPosition - boundDifference, minXPosition - boundDifference,
             maxYPosition - boundDifference, minYPosition - boundDifference};
+
+
+        gameObject.AddComponent<AudioSource>();
+        source.clip = shootSound;
+        source.playOnAwake = true;
     }
 
     /// <summary>
@@ -91,6 +125,8 @@ public class baseBot : MonoBehaviour
         //movement and rotation
         changeVelocity();
 
+        shouldShoot();
+
         //TODO: predict enemy position over time
     }
 
@@ -104,7 +140,7 @@ public class baseBot : MonoBehaviour
         //slows down to reduce collision chance
         Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
         float newVelocity = getMagnitude(dif);
-        if (newVelocity > maxSpeed) newVelocity = maxSpeed;
+        if (newVelocity > maxVelocity) newVelocity = maxVelocity;
 
         Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
         transform.position += rot * frameMovement;
@@ -142,7 +178,7 @@ public class baseBot : MonoBehaviour
         foreach (SpriteRenderer player in players)
         {
             //skip player if outside bots' boundaries
-            if(player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
+            if (player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
                 player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
             {
                 continue;
@@ -156,7 +192,7 @@ public class baseBot : MonoBehaviour
             float distance = getMagnitude(dif);
             //minus (percentOfMaxScore*2)^3 to bias targeting towards those that have more points. 
             float bias = Mathf.Pow(score / maxScore * 50, 3);
-            if(bias > maxBias)
+            if (bias > maxBias)
             {
                 bias = maxBias;
             }
@@ -177,11 +213,11 @@ public class baseBot : MonoBehaviour
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
-            else if(transform.position[0] < softBounds[1])
+            else if (transform.position[0] < softBounds[1])
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
-            if(transform.position[1] > softBounds[2])
+            if (transform.position[1] > softBounds[2])
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
@@ -197,8 +233,9 @@ public class baseBot : MonoBehaviour
     }
 
     /// <summary>
-    /// Finds the degree for Vector1 to point to vector2 in vector1-vector2
+    /// Finds the degree for Vector1 to point to vector2 in vector1(Self)-vector2(target)
     /// Degree returned is [0,360)
+    /// 
     /// </summary>
     /// <param name="dif"></param>
     /// <returns>float</returns>
@@ -262,7 +299,7 @@ public class baseBot : MonoBehaviour
         //Get a Euler angle
         float z = rot.eulerAngles.z % 360;
 
-        float degreeToTarget = findDegree(transform.position - target.transform.position);
+        degreeToTarget = findDegree(transform.position - target.transform.position);
         float rotationDist = z - degreeToTarget;
 
         if ((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
@@ -281,13 +318,69 @@ public class baseBot : MonoBehaviour
         transform.rotation = rot;
 
         return rot;
-
-
-        /*//find desired angle
-        float degreeToTarget = findDegree(transform.position - target.transform.position);
-
-        transform.rotation = Quaternion.Euler(0, 0, degreeToTarget);*/
-
     }
 
+    /// <summary>
+    /// shoots if cooldownTimer allows
+    /// </summary>
+    protected virtual void shoot()
+    {
+        if (cooldownTimer > 0) return;
+
+        cooldownTimer = fireDelay;
+        Vector3 offset = transform.rotation * new Vector3(0, 0.5f, 0);
+        Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
+    }
+
+    /// <summary>
+    /// judges if the bot should shoot
+    /// </summary>
+    protected virtual void shouldShoot()
+    {
+        cooldownTimer -= Time.deltaTime;
+
+        //find range
+        float minDegree = degreeToTarget - 10;
+        float maxDegree = degreeToTarget + 10;
+
+        if (minDegree < 0) minDegree += 360;
+        if (maxDegree >= 360) maxDegree -= 360;
+
+        if (minDegree > maxDegree)
+        {
+            float temp = minDegree;
+            minDegree = maxDegree;
+            maxDegree = temp;
+        }
+
+        //if within range then shoot
+        if (transform.rotation.eulerAngles.z <= maxDegree && transform.rotation.eulerAngles.z >= minDegree)
+        {
+            shoot();
+        }
+    }
+
+    /// <summary>
+    /// Take damage on collision
+    /// </summary>
+    /// <param name="collision"></param>
+    /// <returns></returns>
+    protected virtual IEnumerable OnCollisionEnter2D(Collision2D collision)
+    {
+        health -= damage.damages[collision.gameObject.tag];
+        if (health <= 0)
+        {
+            GetComponent<SpriteRenderer>().sprite = boom;
+            yield return new WaitForSeconds(1.5f);
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Plays shooting sound
+    /// </summary>
+    protected virtual void playShootingSound()
+    {
+        source.PlayOneShot(shootSound);
+    }
 }
