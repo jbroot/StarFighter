@@ -2485,6 +2485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df770a2b83868884d802a251531d63b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionSound: {fileID: 8300000, guid: 0dbd3dd92ef124591937fb8400b5b483, type: 3}
   CurrentLives: 0
   StartingLives: 3
   RemainingLivesText: {fileID: 0}
@@ -2502,6 +2503,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1509951547764742, guid: 7ba84d50e4d7b324480da9597613e2ca,
     type: 2}
   fireDelay: 0.25
+  shootSound: {fileID: 8300000, guid: aac513c8f22ac4aabbcc04194e8706e7, type: 3}
   player: {fileID: 1479890616}
 --- !u!1 &1537043711
 GameObject:
