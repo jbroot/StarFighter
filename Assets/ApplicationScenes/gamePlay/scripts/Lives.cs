@@ -30,11 +30,11 @@ public class Lives : MonoBehaviour
 
     public void LoseALife()
     {
-        CurrentLives -= 1;       
+        CurrentLives -= 1;
+        playExplosionSound();
         if (CurrentLives < 0)
         {
             Destroy(gameObject);
-            playExplosionSound();
         }
         gameObject.GetComponent<Health>().Respawn();
     }
@@ -49,7 +49,7 @@ public class Lives : MonoBehaviour
 	{
 		if (RemainingLivesText != null)
 		{
-			RemainingLivesText.text = "Lives: " + CurrentLives;
+            RemainingLivesText.text = "Lives: " + CurrentLives;
 		}
     }
 }
