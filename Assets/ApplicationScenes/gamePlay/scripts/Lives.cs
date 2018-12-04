@@ -34,9 +34,10 @@ public class Lives : MonoBehaviour
         PlayExplosionSound();
         if (CurrentLives <= 0)
         {
-            Destroy(gameObject);
+
             ExitGame exit = new ExitGame();
-            exit.DisplayGetUsernameMenu();
+            exit.EndOfGame();
+            Destroy(gameObject);
         }
         gameObject.GetComponent<Health>().Respawn();
     }
