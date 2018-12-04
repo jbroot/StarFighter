@@ -17,6 +17,6 @@ public class CameraFollowsPlayer : MonoBehaviour {
 	void LateUpdate()
 	{
 		//set the position of the camera's to be the same as the player's
-		transform.position = player.transform.position + offset;
+	    transform.position = player.transform.position + offset;
 	}
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Drone
   - BaseBot
+  - Asteroid
   layers:
   - Default
   - TransparentFX
