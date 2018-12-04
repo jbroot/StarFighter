@@ -35,22 +35,10 @@ public class Health : MonoBehaviour
 
     void TakeDamage(string collidingObjectName)
     {
-        //Colliding with bots
-        if (collidingObjectName.Contains("bot"))
+        if (collidingObjectName == "bot" || collidingObjectName == "bot (1)")
         {
             CurrentHealth -= 25;
-            return;
         }
-
-        //Colliding with Asteroids
-        if (collidingObjectName.Contains("Asteroid"))
-        {
-            CurrentHealth -= 50;
-            return;
-        }
-
-        //Default if colliding with something not in the list.
-        CurrentHealth -= 20;
     }
 
     void UpdateHealthBar(Slider healthBar)
