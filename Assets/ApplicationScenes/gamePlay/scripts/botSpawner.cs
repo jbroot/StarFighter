@@ -10,6 +10,9 @@ public class botSpawner : MonoBehaviour {
     public int numBaseBotsMax = 10;
     public int numDronesMax = 5;
 
+    public int boundaryWidth = 25;
+    public int boundaryHeight = 25;
+
     public float secondsBetweenBaseBots = 5;
     public float secondsBetweenDrones = 5;
 
@@ -57,7 +60,7 @@ public class botSpawner : MonoBehaviour {
 
     GameObject makeBot(ref GameObject sprite)
     {
-        Vector3 pos = new Vector3(Random.Range(-5f, 5f), Random.Range(-25, 25f), 0);
+        Vector3 pos = new Vector3(Random.Range(-boundaryWidth, boundaryWidth), Random.Range(-boundaryHeight, boundaryHeight), 0);
         Quaternion rot = new Quaternion(0, 0, 0, 1);
 
         return Instantiate(sprite, pos, rot);
