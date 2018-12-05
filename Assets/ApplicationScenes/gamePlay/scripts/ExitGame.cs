@@ -54,7 +54,6 @@ public class ExitGame : MonoBehaviour {
         {
             unameMenu.SetActive(true);
             HideErrorMessage();
-           // DisableQuitButton();
         }
     }
 

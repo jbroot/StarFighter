@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Lives : MonoBehaviour
 {
     public AudioClip explosionSound;
-    private AudioSource source { get { return GetComponent<AudioSource>(); } }
+    private AudioSource Source { get { return GetComponent<AudioSource>(); } }
 
     public int CurrentLives = 0;
     public int StartingLives = 3;
@@ -19,21 +19,24 @@ public class Lives : MonoBehaviour
 	{
 	    CurrentLives = StartingLives;
         gameObject.AddComponent<AudioSource>();
-        source.clip = explosionSound;
-        source.playOnAwake = true;
+        Source.clip = explosionSound;
+        Source.playOnAwake = true;
     }
 
-    void playExplosionSound()
+    void PlayExplosionSound()
     {
-        source.PlayOneShot(explosionSound);
+        Source.PlayOneShot(explosionSound);
     }
 
     public void LoseALife()
     {
         CurrentLives -= 1;
-        playExplosionSound();
-        if (CurrentLives < 0)
+        PlayExplosionSound();
+        if (CurrentLives <= 0)
         {
+
+            ExitGame exit = new ExitGame();
+            exit.EndOfGame();
             Destroy(gameObject);
         }
         gameObject.GetComponent<Health>().Respawn();
