@@ -38,7 +38,6 @@ public class Health : MonoBehaviour
 
     void TakeDamage(string collidingObjectTag)
     {
-        Debug.Log(collidingObjectTag);
         CurrentHealth -= (int) DamageDictionary.damages[collidingObjectTag];
     }
 
@@ -60,9 +59,11 @@ public class Health : MonoBehaviour
             Boom(gameObject);
         }
     }
-    void Boom(GameObject ship)
+    IEnumerable Boom(GameObject ship)
     {
         GetComponent<SpriteRenderer>().sprite = boom;
+        yield return new WaitForSeconds(1.5f);
+        Destroy(ship);
         /*AudioSource music = GetComponent<AudioSource>();
         music.clip = boomSound;
         music.Play();*/

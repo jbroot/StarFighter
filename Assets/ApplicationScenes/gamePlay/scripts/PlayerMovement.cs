@@ -27,19 +27,24 @@ public class PlayerMovement : MonoBehaviour {
 
 
     #region Maneuvering API
-    private void ClampVelocity()
+    /*private void ClampVelocity()
     {
         float x = Mathf.Clamp(rb.velocity.x, -maxVelocity, maxVelocity);
         float y = Mathf.Clamp(rb.velocity.y, -maxVelocity, maxVelocity);
 
         rb.velocity = new Vector2(x, y);
-    }
+    }*/
 
     private void ThrustForward(float amount)
     {
         Vector2 force = transform.up * amount * 5;
 
         rb.AddForce(force);
+
+        if (rb.velocity.magnitude > maxVelocity)
+        {
+            rb.velocity = rb.velocity.normalized * maxVelocity;
+        }
     }
 
     private void Rotate(Transform t, float amount)
