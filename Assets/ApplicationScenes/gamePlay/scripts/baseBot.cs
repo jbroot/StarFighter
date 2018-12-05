@@ -59,7 +59,7 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// How long to show the explosion
     /// </summary>
-    public float secondsBoomLasts = 1.5f;
+    public float secondsBoomLasts = 1.3f;
     #endregion
 
     #region protected attributes
@@ -67,7 +67,6 @@ public class baseBot : MonoBehaviour
     /// Has object exploded
     /// </summary>
     protected bool isBoom = false;
-    protected AudioSource source { get { return GetComponent<AudioSource>(); } }
     /// <summary>
     /// flag for backing up
     /// </summary>
@@ -117,11 +116,6 @@ public class baseBot : MonoBehaviour
         int boundDifference = 100;
         softBounds = new int[] {maxXPosition - boundDifference, minXPosition - boundDifference,
             maxYPosition - boundDifference, minYPosition - boundDifference};
-
-
-        gameObject.AddComponent<AudioSource>();
-        source.clip = shootSound;
-        source.playOnAwake = true;
     }
 
     /// <summary>
@@ -394,7 +388,6 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void playShootingSound()
     {
-        source.PlayOneShot(shootSound);
     }
     #endregion
 
@@ -409,7 +402,9 @@ public class baseBot : MonoBehaviour
         if (health <= 0)
         {
             isBoom = true;
+            //make intangible explosion
             GetComponent<SpriteRenderer>().sprite = boom;
+            Destroy(GetComponent<BoxCollider2D>());
             return;
         }
         isBackingUp = true;

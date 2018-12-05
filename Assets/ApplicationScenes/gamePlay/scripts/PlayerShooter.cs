@@ -17,7 +17,6 @@ public class PlayerShooter : MonoBehaviour {
 	{
         gameObject.AddComponent<AudioSource>();
         source.clip = shootSound;
-        source.playOnAwake = true;
     }
 
     void playShootingSound(){
