@@ -29,7 +29,7 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// how close to other bots is too close
     /// </summary>
-    public float personalBotSpace = 1;
+    public float personalBotSpace = 2;
     /// <summary>
     /// Maximum radius of players to consider. May be affected by bias/score
     /// </summary>
@@ -38,10 +38,10 @@ public class baseBot : MonoBehaviour
     /// Laser that is shot
     /// </summary>
     public GameObject bulletPrefab;
-    public int maxXPosition = 5000;
-    public int minXPosition = -5000;
-    public int maxYPosition = 5000;
-    public int minYPosition = -5000;
+    public int maxXPosition = 500;
+    public int minXPosition = -500;
+    public int maxYPosition = 500;
+    public int minYPosition = -500;
     /// <summary>
     /// max velocity for this bot
     /// </summary>
@@ -57,11 +57,15 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// How long to delay between shots
     /// </summary>
-    public float fireDelay = 1f;
+    public float delayFireSec = 0.5f;
     #endregion
 
     #region protected attributes
     protected AudioSource source { get { return GetComponent<AudioSource>(); } }
+    /// <summary>
+    /// flag for backing up
+    /// </summary>
+    protected bool isBackingUp;
     protected damageDictionary damageDictionary;
     /// <summary>
     /// sprite to target
@@ -83,6 +87,10 @@ public class baseBot : MonoBehaviour
     /// Desired degree
     /// </summary>
     protected float degreeToTarget = 0;
+    /// <summary>
+    /// Rigidbody2D most recently collided with
+    /// </summary>
+    protected Rigidbody2D recentCollision;
     #endregion
 
     /// <summary>
@@ -129,34 +137,44 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// Finds and changes the velocity for this bot
     /// </summary>
-    /// <returns></returns>
+    /// <param name="timesWithProjectedVelocity">Used to back up usually</param>
     protected virtual void changeVelocity()
     {
+        //prioritize not colliding with other bots
+        if (asocialBots()) return;
+
         Quaternion rot = rotate();
         //slows down to reduce collision chance
         Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
         float newVelocity = getMagnitude(dif);
         if (newVelocity > maxVelocity) newVelocity = maxVelocity;
-
+        /*
+        if (isBackingUp)
+        {
+            newVelocity = -newVelocity;
+            //if far enough away from collision then reset isBackingUp
+            isBackingUp = getMagnitude(transform.GetComponent<Rigidbody2D>().position - recentCollision.position) > 2;
+        }*/
         Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
         transform.position += rot * frameMovement;
 
-        asocialBots();
     }
 
     /// <summary>
     /// avoids being in the proximity of other bots
     /// </summary>
-    protected virtual void asocialBots()
+    protected virtual bool asocialBots()
     {
         foreach (SpriteRenderer bot in otherBots)
         {
             if (getMagnitude(bot.transform.position - transform.position) <= personalBotSpace)
             {
                 //moves away from that bot
-                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime * maxVelocity);
+                return true;
             }
         }
+        return false;
     }
 
     /// <summary>
@@ -321,8 +339,7 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void shoot()
     {
-        //Debug.Log(cooldownTimer);
-        cooldownTimer = fireDelay;
+        cooldownTimer = delayFireSec;
         Vector3 offset = transform.rotation * new Vector3(0, 0.5f, 0);
         Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
     }
@@ -337,16 +354,6 @@ public class baseBot : MonoBehaviour
         //find range
         float minDegree = degreeToTarget - 10;
         float maxDegree = degreeToTarget + 10;
-
-        if (minDegree < 0) minDegree += 360;
-        if (maxDegree >= 360) maxDegree -= 360;
-
-        if (minDegree > maxDegree)
-        {
-            float temp = minDegree;
-            minDegree = maxDegree;
-            maxDegree = temp;
-        }
 
         //if within range then shoot
         if (cooldownTimer <= 0 && transform.rotation.eulerAngles.z <= maxDegree && transform.rotation.eulerAngles.z >= minDegree)
@@ -368,7 +375,10 @@ public class baseBot : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = boom;
             //yield return new WaitForSeconds(1.5f);
             Destroy(gameObject);
+            return;
         }
+        isBackingUp = true;
+        recentCollision = collision.gameObject.GetComponent<Rigidbody2D>();
     }
 
     /// <summary>
