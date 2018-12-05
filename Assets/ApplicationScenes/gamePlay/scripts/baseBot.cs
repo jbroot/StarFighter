@@ -162,11 +162,16 @@ public class baseBot : MonoBehaviour
         foreach (SpriteRenderer player in players)
         {
             //skip player if outside bots' boundaries
-            if (player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
-                player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
-            {
+            if(player != null){
+                if (player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
+                    player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
+                {
+                    continue;
+                }
+            }else{
                 continue;
             }
+           
 
             //TODO: find player's score
             float score = 0;

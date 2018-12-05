@@ -11,11 +11,16 @@ public class PlayerScore : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+
 	    CurrentScore = 0;
 	}
 
     public void AddScore(string DestroyedObjectName)
     {
         CurrentScore += (int) scoresDictionary.scores[DestroyedObjectName];
+    }
+
+    public int GetScore(){
+        return CurrentScore;
     }
 }

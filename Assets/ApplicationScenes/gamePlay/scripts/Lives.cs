@@ -36,7 +36,7 @@ public class Lives : MonoBehaviour
         {
 
             ExitGame exit = new ExitGame();
-            exit.EndOfGame();
+            exit.DisplayGetUsernameMenu();
             Destroy(gameObject);
         }
         gameObject.GetComponent<Health>().Respawn();

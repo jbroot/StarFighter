@@ -79,7 +79,10 @@ public class ExitGame : MonoBehaviour {
         InputField usernameInput = usernameInputGO.GetComponent<InputField>();
         string uname = usernameInput.text;
         //TODO get score 
-        int score = 0;
+
+        PlayerScore ps = new PlayerScore();
+        
+        int score = ps.GetScore();
 
         if(uname.Length > 0){
             HideErrorMessage();
