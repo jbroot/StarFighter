@@ -56,9 +56,17 @@ public class baseBot : MonoBehaviour
     /// How long to delay between shots
     /// </summary>
     public float delayFireSec = 0.5f;
+    /// <summary>
+    /// How long to show the explosion
+    /// </summary>
+    public float secondsBoomLasts = 1.5f;
     #endregion
 
     #region protected attributes
+    /// <summary>
+    /// Has object exploded
+    /// </summary>
+    protected bool isBoom = false;
     protected AudioSource source { get { return GetComponent<AudioSource>(); } }
     /// <summary>
     /// flag for backing up
@@ -121,6 +129,16 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
+        if (isBoom)
+        {
+            secondsBoomLasts -= Time.deltaTime;
+            if(secondsBoomLasts < 0)
+            {
+                GetComponent<SpriteRenderer>().sprite = null;
+                Destroy(gameObject);
+            }
+            return;
+        }
         if (!findTarget())
         {
             //no target found
@@ -390,9 +408,8 @@ public class baseBot : MonoBehaviour
         health -= damageDictionary.damages[collision.gameObject.tag];
         if (health <= 0)
         {
+            isBoom = true;
             GetComponent<SpriteRenderer>().sprite = boom;
-            //yield return new WaitForSeconds(1.5f);
-            Destroy(gameObject);
             return;
         }
         isBackingUp = true;
