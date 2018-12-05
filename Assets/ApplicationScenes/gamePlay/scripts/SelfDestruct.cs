@@ -24,11 +24,11 @@ public class SelfDestruct : MonoBehaviour
         }
     }
     /// <summary>
-    /// Destroy on collision after 1-3 frames
+    /// Destroy on collision after .05f
     /// </summary>
     /// <param name="collision"></param>
     void OnCollisionEnter2D(Collision2D collision)
     {
-        timer = 2f * Time.deltaTime;
+        timer = 0.05f;
     }
 }

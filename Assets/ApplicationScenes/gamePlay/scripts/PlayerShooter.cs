@@ -32,9 +32,8 @@ public class PlayerShooter : MonoBehaviour {
 		{
             playShootingSound();
             cooldownTimer = fireDelay;
-
-			Vector3 offset = transform.rotation * new Vector3(0, 0.5f, 0);
-
+			Vector3 offset = transform.rotation * new Vector3(0, 0.75f, 0);
+            bulletPrefab.tag = "BaseLaser";
 			Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
 		}
 	}
