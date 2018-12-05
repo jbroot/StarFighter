@@ -3,15 +3,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class botList {
+/// <summary>
+/// Not currently used
+/// </summary>
+public class botList {
     /// <summary>
     /// List of alive drones
     /// </summary>
-    public static List<GameObject> droneList;
+    public List<GameObject> droneList;
     /// <summary>
     /// List of alive baseBots
     /// </summary>
-    public static List<GameObject> baseBotList;
+    public List<GameObject> baseBotList;
 
 
     /// <summary>
@@ -19,8 +22,9 @@ public static class botList {
     /// </summary>
     /// <param name="tag"></param>
     /// <param name="gameObject"></param>
-    public static void addBot(string tag, GameObject gameObject)
+    public void addBot(string tag, GameObject gameObject)
     {
+        if (gameObject == null) Debug.Log("null");
         if (tag == "Drone")
         {
             droneList.Add(gameObject);
@@ -40,7 +44,7 @@ public static class botList {
     /// </summary>
     /// <param name="tag"></param>
     /// <param name="gameObject"></param>
-    public static void removeBot(string tag, GameObject gameObject)
+    public void removeBot(string tag, GameObject gameObject)
     {
         if (tag == "Drone")
         {

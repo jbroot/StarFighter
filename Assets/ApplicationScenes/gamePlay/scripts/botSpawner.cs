@@ -13,16 +13,13 @@ public class botSpawner : MonoBehaviour {
     public float secondsBetweenBaseBots = 5;
     public float secondsBetweenDrones = 5;
 
-    float baseBotTimer = 1;
-    float droneTimer = 1;
+    //public botList botLists;
+
+    float baseBotTimer = 0;
+    float droneTimer = 0;
 
 	// Use this for initialization
 	void Start () {
-        GameObject drone = makeBot(ref droneObject);
-        GameObject baseBot = makeBot(ref baseBotObject);
-
-        botList.droneList.Add(drone);
-        botList.droneList.Add(baseBot);
         /*
         GameObject[] drones = GameObject.FindGameObjectsWithTag("Drone");
         GameObject[] baseBots = GameObject.FindGameObjectsWithTag("BaseBot");
@@ -39,17 +36,19 @@ public class botSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (baseBotTimer <= 0 && botList.baseBotList.Count < numBaseBotsMax)
+
+        GameObject[] drones = GameObject.FindGameObjectsWithTag("Drone");
+        GameObject[] baseBots = GameObject.FindGameObjectsWithTag("BaseBot");
+
+        if (baseBotTimer <= 0 && baseBots.Length < numBaseBotsMax)
         {
             GameObject bot = makeBot(ref baseBotObject);
             baseBotTimer = secondsBetweenBaseBots;
-            botList.addBot(bot.tag, bot);
         }
-        if(droneTimer <= 0 && botList.droneList.Count < numDronesMax)
+        if(droneTimer <= 0 && drones.Length < numDronesMax)
         {
             GameObject bot = makeBot(ref droneObject);
             droneTimer = secondsBetweenDrones;
-            botList.addBot(bot.tag, bot);
         }
 
         baseBotTimer -= Time.deltaTime;

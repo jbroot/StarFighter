@@ -18,7 +18,6 @@ public class PlayerShooter : MonoBehaviour {
         gameObject.AddComponent<AudioSource>();
         source.clip = shootSound;
         source.playOnAwake = true;
-
     }
 
     void playShootingSound(){
@@ -36,7 +35,6 @@ public class PlayerShooter : MonoBehaviour {
             bulletPrefab.tag = "BaseLaser";
 			var laser = Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
             //Physics2D.IgnoreCollision(laser.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true);
-
         }
 	}
 }

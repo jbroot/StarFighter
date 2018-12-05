@@ -408,9 +408,8 @@ public class baseBot : MonoBehaviour
         health -= damageDictionary.damages[collision.gameObject.tag];
         if (health <= 0)
         {
-            GetComponent<SpriteRenderer>().sprite = boom;
             isBoom = true;
-            botList.removeBot(gameObject.tag, gameObject);
+            GetComponent<SpriteRenderer>().sprite = boom;
             return;
         }
         isBackingUp = true;
