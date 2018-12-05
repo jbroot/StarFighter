@@ -3,32 +3,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class botList : MonoBehaviour {
+public static class botList {
     /// <summary>
     /// List of alive drones
     /// </summary>
-    public List<GameObject> droneList;
+    public static List<GameObject> droneList;
     /// <summary>
     /// List of alive baseBots
     /// </summary>
-    public List<GameObject> baseBotList;
-
-	/// <summary>
-    /// Initialize lists
-    /// </summary>
-	void Start () {
-        GameObject[] drones = GameObject.FindGameObjectsWithTag("Drone");
-        GameObject[] baseBots = GameObject.FindGameObjectsWithTag("BaseBot");
-
-        foreach (GameObject bot in drones)
-        {
-            droneList.Add(bot);
-        }
-        foreach (GameObject bot in baseBots)
-        {
-            baseBotList.Add(bot);
-        }
-    }
+    public static List<GameObject> baseBotList;
 
 
     /// <summary>
@@ -36,7 +19,7 @@ public class botList : MonoBehaviour {
     /// </summary>
     /// <param name="tag"></param>
     /// <param name="gameObject"></param>
-    public void addBot(string tag, GameObject gameObject)
+    public static void addBot(string tag, GameObject gameObject)
     {
         if (tag == "Drone")
         {
@@ -57,7 +40,7 @@ public class botList : MonoBehaviour {
     /// </summary>
     /// <param name="tag"></param>
     /// <param name="gameObject"></param>
-    public void removeBot(string tag, GameObject gameObject)
+    public static void removeBot(string tag, GameObject gameObject)
     {
         if (tag == "Drone")
         {

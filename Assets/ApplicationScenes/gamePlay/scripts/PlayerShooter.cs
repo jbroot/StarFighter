@@ -34,7 +34,9 @@ public class PlayerShooter : MonoBehaviour {
             cooldownTimer = fireDelay;
 			Vector3 offset = transform.rotation * new Vector3(0, 0.75f, 0);
             bulletPrefab.tag = "BaseLaser";
-			Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
-		}
+			var laser = Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
+            //Physics2D.IgnoreCollision(laser.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true);
+
+        }
 	}
 }
