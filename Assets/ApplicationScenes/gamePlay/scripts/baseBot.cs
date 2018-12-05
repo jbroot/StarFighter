@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class baseBot : MonoBehaviour
@@ -66,6 +64,9 @@ public class baseBot : MonoBehaviour
     /// flag for backing up
     /// </summary>
     protected bool isBackingUp;
+    /// <summary>
+    /// The damage dictionary
+    /// </summary>
     protected damageDictionary damageDictionary;
     /// <summary>
     /// sprite to target
@@ -132,49 +133,6 @@ public class baseBot : MonoBehaviour
         shouldShoot();
 
         //TODO: predict enemy position over time
-    }
-
-    /// <summary>
-    /// Finds and changes the velocity for this bot
-    /// </summary>
-    /// <param name="timesWithProjectedVelocity">Used to back up usually</param>
-    protected virtual void changeVelocity()
-    {
-        //prioritize not colliding with other bots
-        if (asocialBots()) return;
-
-        Quaternion rot = rotate();
-        //slows down to reduce collision chance
-        Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
-        float newVelocity = getMagnitude(dif);
-        if (newVelocity > maxVelocity) newVelocity = maxVelocity;
-        /*
-        if (isBackingUp)
-        {
-            newVelocity = -newVelocity;
-            //if far enough away from collision then reset isBackingUp
-            isBackingUp = getMagnitude(transform.GetComponent<Rigidbody2D>().position - recentCollision.position) > 2;
-        }*/
-        Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
-        transform.position += rot * frameMovement;
-
-    }
-
-    /// <summary>
-    /// avoids being in the proximity of other bots
-    /// </summary>
-    protected virtual bool asocialBots()
-    {
-        foreach (SpriteRenderer bot in otherBots)
-        {
-            if (getMagnitude(bot.transform.position - transform.position) <= personalBotSpace)
-            {
-                //moves away from that bot
-                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime * maxVelocity);
-                return true;
-            }
-        }
-        return false;
     }
 
     /// <summary>
@@ -246,6 +204,87 @@ public class baseBot : MonoBehaviour
         return true;
     }
 
+    #region Movement
+
+    /// <summary>
+    /// Finds and changes the velocity for this bot
+    /// </summary>
+    /// <param name="timesWithProjectedVelocity">Used to back up usually</param>
+    protected virtual void changeVelocity()
+    {
+        //prioritize not colliding with other bots
+        if (asocialBots()) return;
+
+        Quaternion rot = rotate();
+        //slows down to reduce collision chance
+        Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
+        float newVelocity = getMagnitude(dif);
+        if (newVelocity > maxVelocity) newVelocity = maxVelocity;
+        /*
+        if (isBackingUp)
+        {
+            newVelocity = -newVelocity;
+            //if far enough away from collision then reset isBackingUp
+            isBackingUp = getMagnitude(transform.GetComponent<Rigidbody2D>().position - recentCollision.position) > 2;
+        }*/
+        Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
+        transform.position += rot * frameMovement;
+
+    }
+
+    /// <summary>
+    /// avoids being in the proximity of other bots
+    /// </summary>
+    protected virtual bool asocialBots()
+    {
+        foreach (SpriteRenderer bot in otherBots)
+        {
+            if (getMagnitude(bot.transform.position - transform.position) <= personalBotSpace)
+            {
+                //moves away from that bot
+                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime * maxVelocity);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// rotates bot
+    /// </summary>
+    protected virtual Quaternion rotate()
+    {
+
+        // Get the Quaternion
+        Quaternion rot = transform.rotation;
+
+        //Get a Euler angle
+        float z = rot.eulerAngles.z % 360;
+
+        degreeToTarget = findDegree(transform.position - target.transform.position);
+        float rotationDist = z - degreeToTarget;
+
+        if ((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
+        {
+            z = z - rotationSpeed * Time.deltaTime;
+        }
+        else if (rotationDist != 0)
+        {
+            z = z + rotationSpeed * Time.deltaTime;
+        }
+
+        //Recreate the Quaternion
+        rot = Quaternion.Euler(0, 0, z);
+
+        //Feed Quaternion into our rotation
+        transform.rotation = rot;
+
+        return rot;
+    }
+
+    #endregion
+
+    #region Math Help Functions
     /// <summary>
     /// Finds the degree for Vector1 to point to vector2 in vector1(Self)-vector2(target)
     /// Degree returned is [0,360)
@@ -300,40 +339,9 @@ public class baseBot : MonoBehaviour
         origVector[1] *= scalar;
         return origVector;
     }
+    #endregion
 
-    /// <summary>
-    /// rotates bot
-    /// </summary>
-    protected virtual Quaternion rotate()
-    {
-
-        // Get the Quaternion
-        Quaternion rot = transform.rotation;
-
-        //Get a Euler angle
-        float z = rot.eulerAngles.z % 360;
-
-        degreeToTarget = findDegree(transform.position - target.transform.position);
-        float rotationDist = z - degreeToTarget;
-
-        if ((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
-        {
-            z = z - rotationSpeed * Time.deltaTime;
-        }
-        else if (rotationDist != 0)
-        {
-            z = z + rotationSpeed * Time.deltaTime;
-        }
-
-        //Recreate the Quaternion
-        rot = Quaternion.Euler(0, 0, z);
-
-        //Feed Quaternion into our rotation
-        transform.rotation = rot;
-
-        return rot;
-    }
-
+    #region Shooting Decision and Execution
     /// <summary>
     /// shoots if cooldownTimer allows
     /// </summary>
@@ -363,6 +371,15 @@ public class baseBot : MonoBehaviour
     }
 
     /// <summary>
+    /// Plays shooting sound
+    /// </summary>
+    protected virtual void playShootingSound()
+    {
+        source.PlayOneShot(shootSound);
+    }
+    #endregion
+
+    /// <summary>
     /// Take damage on collision
     /// </summary>
     /// <param name="collision"></param>
@@ -379,13 +396,5 @@ public class baseBot : MonoBehaviour
         }
         isBackingUp = true;
         recentCollision = collision.gameObject.GetComponent<Rigidbody2D>();
-    }
-
-    /// <summary>
-    /// Plays shooting sound
-    /// </summary>
-    protected virtual void playShootingSound()
-    {
-        source.PlayOneShot(shootSound);
     }
 }
