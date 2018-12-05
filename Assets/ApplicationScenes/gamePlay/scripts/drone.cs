@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class drone : baseBot
 {
@@ -8,12 +6,18 @@ public class drone : baseBot
     public float acceleration = 100;
     public float botHealth = 10;
 
+    /// <summary>
+    /// Changes default health
+    /// </summary>
     protected override void Start()
     {
         base.Start();
         health = botHealth;
     }
 
+    /// <summary>
+    /// Does not slow down to avoid collisions
+    /// </summary>
     protected override void changeVelocity()
     {
         rotate();
@@ -39,7 +43,7 @@ public class drone : baseBot
     }
 
     /// <summary>
-    /// Don't shoot this drone is a kamikaze
+    /// Don't shoot. This drone is just a kamikaze
     /// </summary>
     protected override void shouldShoot()
     {
