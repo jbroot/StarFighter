@@ -10,11 +10,11 @@ public class botSpawner : MonoBehaviour {
     public int numBaseBotsMax = 10;
     public int numDronesMax = 5;
 
-    public int boundaryWidth = 25;
-    public int boundaryHeight = 25;
+    public int boundaryWidth = 50;
+    public int boundaryHeight = 50;
 
-    public float secondsBetweenBaseBots = 5;
-    public float secondsBetweenDrones = 5;
+    public float secondsBetweenBaseBots = 4;
+    public float secondsBetweenDrones = 4;
 
     //public botList botLists;
 
