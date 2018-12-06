@@ -35,7 +35,6 @@ public class Lives : MonoBehaviour
         UpdateLivesUI();
         if (CurrentLives <= 0)
         {
-
             ExitGame exit = new ExitGame();
             exit.DisplayGetUsernameMenu();
             Destroy(gameObject);
