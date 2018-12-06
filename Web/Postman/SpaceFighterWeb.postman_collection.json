@@ -1,0 +1,708 @@
+{
+	"info": {
+		"_postman_id": "c1767188-f1d8-4a8b-a1eb-3c6a7153a068",
+		"name": "SpaceFighterWeb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clear Scores (I)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c854ae2c-988b-4d85-a3fb-d733e5d5622d",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Empty Top Ten Scores",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e2d10f58-0759-4b38-98c2-cffb3539ecdc",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"...\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Score for postman01 (I)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "969825a5-e689-46a3-b733-bb343215fb49",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "postman01|1111"
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Score for postman02 (I)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b76194f5-75f8-46ba-9a4f-ab7915ce0864",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "postman02|2222"
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Score for postman03 (I)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7964c942-4767-43ad-899f-ce3ec1b2cf1b",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/octet-stream",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "postman03|3333"
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Top Ten Scores (I)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e2d10f58-0759-4b38-98c2-cffb3539ecdc",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"[\\\"postman03\\\",\\\"3333\\\",\\\"postman02\\\",\\\"2222\\\",\\\"postman01\\\",\\\"1111\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\"]\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clear Scores (II)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1cd1bdaa-699f-45f6-80b0-b437cfa36ce6",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/octet-stream",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Score for postman03 (II)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7964c942-4767-43ad-899f-ce3ec1b2cf1b",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "postman03|3333"
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Score for postman02 (II)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b76194f5-75f8-46ba-9a4f-ab7915ce0864",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "postman02|2222"
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Score for postman01 (II)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "969825a5-e689-46a3-b733-bb343215fb49",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "postman01|1111"
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Top Ten Scores (II)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e2d10f58-0759-4b38-98c2-cffb3539ecdc",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"[\\\"postman03\\\",\\\"3333\\\",\\\"postman02\\\",\\\"2222\\\",\\\"postman01\\\",\\\"1111\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\"]\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clear Scores (III)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1cd1bdaa-699f-45f6-80b0-b437cfa36ce6",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"\\\"True\\\"\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/octet-stream",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Top Ten Scores [should fail]",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e2d10f58-0759-4b38-98c2-cffb3539ecdc",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"[\\\"postman03\\\",\\\"3333\\\",\\\"postman02\\\",\\\"2222\\\",\\\"postman01\\\",\\\"1111\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\",\\\"...\\\",\\\"0\\\"]\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/octet-stream"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://spacefighterweb.azurewebsites.net/api/scores",
+					"protocol": "http",
+					"host": [
+						"spacefighterweb",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"scores"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
