@@ -408,6 +408,13 @@ public class baseBot : MonoBehaviour
         {
             isBoom = true;
             //make intangible explosion
+            if (collision.gameObject.GetComponentInParent<PlayerScore>() != null)
+            {
+                
+                collision.gameObject.GetComponentInParent<PlayerScore>().AddScore(gameObject.tag);
+                //Debug.Log(collision.gameObject.tag);
+            }
+
             GetComponent<SpriteRenderer>().sprite = boom;
             Destroy(GetComponent<BoxCollider2D>());
             return;

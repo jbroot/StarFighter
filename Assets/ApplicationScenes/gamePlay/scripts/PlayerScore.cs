@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,11 +14,13 @@ public class PlayerScore : MonoBehaviour
 	{
 
 	    CurrentScore = 0;
+        scoresDictionary = new ScoreDictionary();
 	}
 
-    public void AddScore(string DestroyedObjectName)
+    public void AddScore(string DestroyedObjectTag)
     {
-        CurrentScore += (int) scoresDictionary.scores[DestroyedObjectName];
+        CurrentScore += (int) scoresDictionary.scores[DestroyedObjectTag];
+        //Debug.Log("Score: " + CurrentScore);
     }
 
     public int GetScore(){
