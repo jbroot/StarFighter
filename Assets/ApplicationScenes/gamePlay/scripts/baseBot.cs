@@ -408,10 +408,15 @@ public class baseBot : MonoBehaviour
         {
             isBoom = true;
             //make intangible explosion
+
+            //Cheat script for single player scoring.
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponent<PlayerScore>().AddScore(gameObject.tag);
+
+            //Scoring should be done this way, but weird things with parents and time constraints don't allow it.
             if (collision.gameObject.GetComponentInParent<PlayerScore>() != null)
             {
-                
-                collision.gameObject.GetComponentInParent<PlayerScore>().AddScore(gameObject.tag);
+                //collision.gameObject.GetComponentInParent<PlayerScore>().AddScore(gameObject.tag);
                 //Debug.Log(collision.gameObject.tag);
             }
 
