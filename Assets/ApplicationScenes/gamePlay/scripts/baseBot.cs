@@ -1,17 +1,21 @@
-﻿using System.Collections;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class baseBot : MonoBehaviour
 {
-
-    public float height = 1;
-    public float width = 1;
+    #region public attributes
     /// <summary>
-    /// initial position
+    /// The laser sound
     /// </summary>
-    public Vector2 initialPosition = new Vector2(1, 0);
+    public AudioClip shootSound;
+    /// <summary>
+    /// The sprite for death animation
+    /// </summary>
+    public Sprite boom;
+    /// <summary>
+    /// The bot's health
+    /// </summary>
+    public float health = 100;
     /// <summary>
     /// list of players to search
     /// </summary>
@@ -23,19 +27,23 @@ public class baseBot : MonoBehaviour
     /// <summary>
     /// how close to other bots is too close
     /// </summary>
-    public float personalBotSpace = 1;
+    public float personalBotSpace = 2;
     /// <summary>
     /// Maximum radius of players to consider. May be affected by bias/score
     /// </summary>
     public float radar = 30;
-    public int maxXPosition = 5000;
-    public int minXPosition = -5000;
-    public int maxYPosition = 5000;
-    public int minYPosition = -5000;
+    /// <summary>
+    /// Laser that is shot
+    /// </summary>
+    public GameObject bulletPrefab;
+    public int maxXPosition = 500;
+    public int minXPosition = -500;
+    public int maxYPosition = 500;
+    public int minYPosition = -500;
     /// <summary>
     /// max velocity for this bot
     /// </summary>
-    public float maxSpeed = 4.5f;
+    public float maxVelocity = 4.5f;
     /// <summary>
     /// What score is considered to be 100% in the score-bias search alternative
     /// </summary>
@@ -44,7 +52,29 @@ public class baseBot : MonoBehaviour
     /// speed allowed for rotation
     /// </summary>
     public float rotationSpeed = 180f;
+    /// <summary>
+    /// How long to delay between shots
+    /// </summary>
+    public float delayFireSec = 0.5f;
+    /// <summary>
+    /// How long to show the explosion
+    /// </summary>
+    public float secondsBoomLasts = 1.3f;
+    #endregion
 
+    #region protected attributes
+    /// <summary>
+    /// Has object exploded
+    /// </summary>
+    protected bool isBoom = false;
+    /// <summary>
+    /// flag for backing up
+    /// </summary>
+    protected bool isBackingUp;
+    /// <summary>
+    /// The damage dictionary
+    /// </summary>
+    protected damageDictionary damageDictionary;
     /// <summary>
     /// sprite to target
     /// </summary>
@@ -57,16 +87,27 @@ public class baseBot : MonoBehaviour
     /// [maxX, minX, maxY, minY] if no target is found then avoid this zone
     /// </summary>
     protected int[] softBounds;
+    /// <summary>
+    /// Fire ready when cooldownTimer == 0
+    /// </summary>
+    protected float cooldownTimer = 0;
+    /// <summary>
+    /// Desired degree
+    /// </summary>
+    protected float degreeToTarget = 0;
+    /// <summary>
+    /// Rigidbody2D most recently collided with
+    /// </summary>
+    protected Rigidbody2D recentCollision;
+    #endregion
 
     /// <summary>
     /// initialization
     /// </summary>
     protected virtual void Start()
     {
-        //scale the sprite
-        transform.localScale = new Vector2(width, height);
-        //spawn
-        transform.position = initialPosition;
+        damageDictionary = new damageDictionary();
+        
         //rotate to 0 degrees
         Quaternion rotation = transform.localRotation;
         rotation.z = 0;
@@ -82,6 +123,16 @@ public class baseBot : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
+        if (isBoom)
+        {
+            secondsBoomLasts -= Time.deltaTime;
+            if(secondsBoomLasts < 0)
+            {
+                GetComponent<SpriteRenderer>().sprite = null;
+                Destroy(gameObject);
+            }
+            return;
+        }
         if (!findTarget())
         {
             //no target found
@@ -91,40 +142,9 @@ public class baseBot : MonoBehaviour
         //movement and rotation
         changeVelocity();
 
+        shouldShoot();
+
         //TODO: predict enemy position over time
-    }
-
-    /// <summary>
-    /// Finds and changes the velocity for this bot
-    /// </summary>
-    /// <returns></returns>
-    protected virtual void changeVelocity()
-    {
-        Quaternion rot = rotate();
-        //slows down to reduce collision chance
-        Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
-        float newVelocity = getMagnitude(dif);
-        if (newVelocity > maxSpeed) newVelocity = maxSpeed;
-
-        Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
-        transform.position += rot * frameMovement;
-
-        asocialBots();
-    }
-
-    /// <summary>
-    /// avoids being in the proximity of other bots
-    /// </summary>
-    protected virtual void asocialBots()
-    {
-        foreach (SpriteRenderer bot in otherBots)
-        {
-            if (getMagnitude(bot.transform.position - transform.position) <= personalBotSpace)
-            {
-                //moves away from that bot
-                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime);
-            }
-        }
     }
 
     /// <summary>
@@ -142,11 +162,16 @@ public class baseBot : MonoBehaviour
         foreach (SpriteRenderer player in players)
         {
             //skip player if outside bots' boundaries
-            if(player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
-                player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
-            {
+            if(player != null){
+                if (player.transform.position[0] > maxXPosition || player.transform.position[0] < minXPosition ||
+                    player.transform.position[1] > maxYPosition || player.transform.position[1] < minYPosition)
+                {
+                    continue;
+                }
+            }else{
                 continue;
             }
+           
 
             //TODO: find player's score
             float score = 0;
@@ -156,7 +181,7 @@ public class baseBot : MonoBehaviour
             float distance = getMagnitude(dif);
             //minus (percentOfMaxScore*2)^3 to bias targeting towards those that have more points. 
             float bias = Mathf.Pow(score / maxScore * 50, 3);
-            if(bias > maxBias)
+            if (bias > maxBias)
             {
                 bias = maxBias;
             }
@@ -177,11 +202,11 @@ public class baseBot : MonoBehaviour
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
-            else if(transform.position[0] < softBounds[1])
+            else if (transform.position[0] < softBounds[1])
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
-            if(transform.position[1] > softBounds[2])
+            if (transform.position[1] > softBounds[2])
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
@@ -196,9 +221,91 @@ public class baseBot : MonoBehaviour
         return true;
     }
 
+    #region Movement
+
     /// <summary>
-    /// Finds the degree for Vector1 to point to vector2 in vector1-vector2
+    /// Finds and changes the velocity for this bot
+    /// </summary>
+    /// <param name="timesWithProjectedVelocity">Used to back up usually</param>
+    protected virtual void changeVelocity()
+    {
+        //prioritize not colliding with other bots
+        if (asocialBots()) return;
+
+        Quaternion rot = rotate();
+        //slows down to reduce collision chance
+        Vector2 dif = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
+        float newVelocity = getMagnitude(dif);
+        if (newVelocity > maxVelocity) newVelocity = maxVelocity;
+        /*
+        if (isBackingUp)
+        {
+            newVelocity = -newVelocity;
+            //if far enough away from collision then reset isBackingUp
+            isBackingUp = getMagnitude(transform.GetComponent<Rigidbody2D>().position - recentCollision.position) > 2;
+        }*/
+        Vector3 frameMovement = new Vector3(0, newVelocity * Time.deltaTime, 0);
+        transform.position += rot * frameMovement;
+
+    }
+
+    /// <summary>
+    /// avoids being in the proximity of other bots
+    /// </summary>
+    protected virtual bool asocialBots()
+    {
+        foreach (SpriteRenderer bot in otherBots)
+        {
+            if (getMagnitude(bot.transform.position - transform.position) <= personalBotSpace)
+            {
+                //moves away from that bot
+                transform.position = Vector2.MoveTowards(transform.position, bot.transform.position, -Time.deltaTime * maxVelocity);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// rotates bot
+    /// </summary>
+    protected virtual Quaternion rotate()
+    {
+
+        // Get the Quaternion
+        Quaternion rot = transform.rotation;
+
+        //Get a Euler angle
+        float z = rot.eulerAngles.z % 360;
+
+        degreeToTarget = findDegree(transform.position - target.transform.position);
+        float rotationDist = z - degreeToTarget;
+
+        if ((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
+        {
+            z = z - rotationSpeed * Time.deltaTime;
+        }
+        else if (rotationDist != 0)
+        {
+            z = z + rotationSpeed * Time.deltaTime;
+        }
+
+        //Recreate the Quaternion
+        rot = Quaternion.Euler(0, 0, z);
+
+        //Feed Quaternion into our rotation
+        transform.rotation = rot;
+
+        return rot;
+    }
+
+    #endregion
+
+    #region Math Help Functions
+    /// <summary>
+    /// Finds the degree for Vector1 to point to vector2 in vector1(Self)-vector2(target)
     /// Degree returned is [0,360)
+    /// 
     /// </summary>
     /// <param name="dif"></param>
     /// <returns>float</returns>
@@ -249,45 +356,76 @@ public class baseBot : MonoBehaviour
         origVector[1] *= scalar;
         return origVector;
     }
+    #endregion
 
+    #region Shooting Decision and Execution
     /// <summary>
-    /// rotates bot
+    /// shoots if cooldownTimer allows
     /// </summary>
-    protected virtual Quaternion rotate()
+    protected virtual void shoot()
     {
-
-        // Get the Quaternion
-        Quaternion rot = transform.rotation;
-
-        //Get a Euler angle
-        float z = rot.eulerAngles.z % 360;
-
-        float degreeToTarget = findDegree(transform.position - target.transform.position);
-        float rotationDist = z - degreeToTarget;
-
-        if ((rotationDist > 0 && rotationDist < 180) || rotationDist < -180)
-        {
-            z = z - rotationSpeed * Time.deltaTime;
-        }
-        else if (rotationDist != 0)
-        {
-            z = z + rotationSpeed * Time.deltaTime;
-        }
-
-        //Recreate the Quaternion
-        rot = Quaternion.Euler(0, 0, z);
-
-        //Feed Quaternion into our rotation
-        transform.rotation = rot;
-
-        return rot;
-
-
-        /*//find desired angle
-        float degreeToTarget = findDegree(transform.position - target.transform.position);
-
-        transform.rotation = Quaternion.Euler(0, 0, degreeToTarget);*/
-
+        cooldownTimer = delayFireSec;
+        Vector3 offset = transform.rotation * new Vector3(0, 0.75f, 0);
+        bulletPrefab.tag = "BaseLaser";
+        Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
     }
 
+    /// <summary>
+    /// judges if the bot should shoot
+    /// </summary>
+    protected virtual void shouldShoot()
+    {
+        cooldownTimer -= Time.deltaTime;
+
+        //find range
+        float minDegree = degreeToTarget - 10;
+        float maxDegree = degreeToTarget + 10;
+
+        //if within range then shoot
+        if (cooldownTimer <= 0 && transform.rotation.eulerAngles.z <= maxDegree && transform.rotation.eulerAngles.z >= minDegree)
+        {
+            shoot();
+        }
+    }
+
+    /// <summary>
+    /// Plays shooting sound
+    /// </summary>
+    protected virtual void playShootingSound()
+    {
+    }
+    #endregion
+
+    /// <summary>
+    /// Take damage on collision
+    /// </summary>
+    /// <param name="collision"></param>
+    /// <returns></returns>
+    protected void OnCollisionEnter2D(Collision2D collision)
+    {
+        health -= damageDictionary.damages[collision.gameObject.tag];
+        if (health <= 0)
+        {
+            isBoom = true;
+            //make intangible explosion
+
+            //Cheat script for single player scoring.
+            GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
+            PlayerScore player = playerGO.GetComponent<PlayerScore>();
+            player.AddScore(gameObject.tag);
+
+            //Scoring should be done this way, but weird things with parents and time constraints don't allow it.
+            if (collision.gameObject.GetComponentInParent<PlayerScore>() != null)
+            {
+                //collision.gameObject.GetComponentInParent<PlayerScore>().AddScore(gameObject.tag);
+                //Debug.Log(collision.gameObject.tag);
+            }
+
+            GetComponent<SpriteRenderer>().sprite = boom;
+            Destroy(GetComponent<BoxCollider2D>());
+            return;
+        }
+        isBackingUp = true;
+        recentCollision = collision.gameObject.GetComponent<Rigidbody2D>();
+    }
 }

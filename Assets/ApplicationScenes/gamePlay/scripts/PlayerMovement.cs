@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviour
+{
 
 
     private Rigidbody2D rb;
     public float maxVelocity = 5;
     public float rotationSpeed = 3;
+
+    public float halfWidth = 50;
+    public float halfHeight = 50;
 
     #region MonoBehaviour API
     private void Start()
@@ -21,30 +25,67 @@ public class PlayerMovement : MonoBehaviour {
         float yAxis = Input.GetAxis("Vertical");
         float xAxis = Input.GetAxis("Horizontal");
 
-        ThrustForward(yAxis);
-        Rotate(transform, xAxis * -rotationSpeed * Time.deltaTime);
+        Rotate(xAxis * -rotationSpeed * Time.deltaTime);
+
+        boundaries();
+
+        ThrustForward(yAxis, gameObject);
     }
 
 
     #region Maneuvering API
-    private void ClampVelocity()
+    /// <summary>
+    /// Enforce boundaries
+    /// </summary>
+    private void boundaries()
+    {
+        Vector2 tempPos = transform.position;
+        //Can't go past boundaries
+        if (transform.position.x < -halfWidth)
+        {
+            tempPos.x = -halfWidth;
+        }
+        else if (transform.position.x > halfWidth)
+        {
+            tempPos.x = halfWidth;
+        }
+        else if (transform.position.y < -halfHeight)
+        {
+            tempPos.y = -halfHeight;
+        }
+        else if (transform.position.y > halfHeight)
+        {
+            tempPos.y = halfHeight;
+        }
+        else return;
+
+        transform.position = tempPos;
+        GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+    }
+
+    /*private void ClampVelocity()
     {
         float x = Mathf.Clamp(rb.velocity.x, -maxVelocity, maxVelocity);
         float y = Mathf.Clamp(rb.velocity.y, -maxVelocity, maxVelocity);
 
         rb.velocity = new Vector2(x, y);
-    }
+    }*/
 
-    private void ThrustForward(float amount)
+    private void ThrustForward(float amount, GameObject gmObject)
     {
         Vector2 force = transform.up * amount * 5;
 
         rb.AddForce(force);
+
+        if (rb.velocity.magnitude > maxVelocity)
+        {
+            rb.velocity = rb.velocity.normalized * maxVelocity;
+        }
     }
 
-    private void Rotate(Transform t, float amount)
+    private void Rotate(float amount)
     {
-        t.Rotate(0, 0, amount);
+        transform.Rotate(0, 0, amount);
     }
 
 

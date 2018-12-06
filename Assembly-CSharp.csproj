@@ -64,8 +64,10 @@
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Asteroid_Movement.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Asteroid_Spawner.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\baseBot.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\botList.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\botSpawner.cs" />
+    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\CameraFollowsPlayer.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\damageDictionary.cs" />
-    <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\DamageHandler.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\drone.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\Energy.cs" />
     <Compile Include="Assets\ApplicationScenes\gamePlay\scripts\ExitGame.cs" />

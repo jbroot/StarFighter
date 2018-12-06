@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -13,12 +14,14 @@ public class Health : MonoBehaviour
     public float MaxHealth = 100f;
 
     public Slider HealthBar;
+    public damageDictionary DamageDictionary;
 
     // Use this for initialization
     void Start()
     {
         CurrentHealth = MaxHealth;
         UpdateHealthBar(HealthBar);
+        DamageDictionary = new damageDictionary();
     }
 
     public void Respawn()
@@ -29,16 +32,13 @@ public class Health : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        TakeDamage(collision.gameObject.name);
+        TakeDamage(collision.gameObject.tag);
         UpdateHealthBar(HealthBar);
     }
 
-    void TakeDamage(string collidingObjectName)
+    void TakeDamage(string collidingObjectTag)
     {
-        if (collidingObjectName == "bot" || collidingObjectName == "bot (1)")
-        {
-            CurrentHealth -= 25;
-        }
+        CurrentHealth -= (int) DamageDictionary.damages[collidingObjectTag];
     }
 
     void UpdateHealthBar(Slider healthBar)
@@ -59,9 +59,11 @@ public class Health : MonoBehaviour
             Boom(gameObject);
         }
     }
-    void Boom(GameObject ship)
+    IEnumerable Boom(GameObject ship)
     {
         GetComponent<SpriteRenderer>().sprite = boom;
+        yield return new WaitForSeconds(1.5f);
+        Destroy(ship);
         /*AudioSource music = GetComponent<AudioSource>();
         music.clip = boomSound;
         music.Play();*/

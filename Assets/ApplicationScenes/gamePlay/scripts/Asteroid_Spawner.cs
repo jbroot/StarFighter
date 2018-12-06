@@ -31,7 +31,8 @@ public class Asteroid_Spawner : MonoBehaviour {
             
 
             //print("Spawning Asteroid");
-            Instantiate(asteroidPrefabArray[asteroidPick], transform.position + offset,Quaternion.identity);
+            GameObject Asteroid = Instantiate(asteroidPrefabArray[asteroidPick], transform.position + offset,Quaternion.identity);
+            Asteroid.tag = "Asteroid";
 
         }
     }

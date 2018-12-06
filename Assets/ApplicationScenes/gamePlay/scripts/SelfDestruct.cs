@@ -2,25 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelfDestruct : MonoBehaviour {
+public class SelfDestruct : MonoBehaviour
+{
 
-	public GameObject bulletPrefab;
+    public GameObject bulletPrefab;
 
-	public float timer = 2f;
-	public float time;
-	// Use this for initialization
-	void Start()
-	{
+    public float timer = 2f;
+    // Use this for initialization
+    void Start()
+    {
 
-	}
+    }
 
-	// Update is called once per frame
-	void Update()
-	{
-		timer -= Time.deltaTime;
-		if (timer <= 0)
-		{
-			Destroy(bulletPrefab);
-		}
-	}
+    // Update is called once per frame
+    void Update()
+    {
+        timer -= Time.deltaTime;
+        if (timer <= 0)
+        {
+            Destroy(bulletPrefab);
+        }
+    }
+    /// <summary>
+    /// Destroy on collision after .05f
+    /// </summary>
+    /// <param name="collision"></param>
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        timer = 0.05f;
+    }
 }

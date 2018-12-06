@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreDictionary : MonoBehaviour {
+public class ScoreDictionary{
 
     /// <summary>
     /// (Sprite's tag, point value)
@@ -10,7 +10,7 @@ public class ScoreDictionary : MonoBehaviour {
     public Dictionary<string, double> scores = new Dictionary<string, double>();
 
     // Use this for initialization
-    public void Start()
+    public ScoreDictionary()
     {
         scores.Add("BaseBot", 1);
         scores.Add("Drone", 5);

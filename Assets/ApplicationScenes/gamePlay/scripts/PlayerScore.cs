@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerScore : MonoBehaviour
 {
@@ -11,11 +13,26 @@ public class PlayerScore : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+
 	    CurrentScore = 0;
+        scoresDictionary = new ScoreDictionary();
 	}
 
-    public void AddScore(string DestroyedObjectName)
+    public void AddScore(string DestroyedObjectTag)
     {
-        CurrentScore += (int) scoresDictionary.scores[DestroyedObjectName];
+        CurrentScore += (int) scoresDictionary.scores[DestroyedObjectTag];
+        //Debug.Log("Score: " + CurrentScore);
+        UpdateUIScore(CurrentScore);
+    }
+
+    public int GetScore(){
+        return CurrentScore;
+    }
+
+    public void UpdateUIScore(int currentScore){
+        TextMeshProUGUI scoreText = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
+        if(scoreText != null){
+            scoreText.text = currentScore.ToString();
+        }
     }
 }
