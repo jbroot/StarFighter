@@ -8,6 +8,7 @@ TagManager:
   - BaseBot
   - Asteroid
   - BaseLaser
+  - TedHead
   layers:
   - Default
   - TransparentFX
