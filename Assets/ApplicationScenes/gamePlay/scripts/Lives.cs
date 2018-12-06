@@ -32,6 +32,7 @@ public class Lives : MonoBehaviour
     {
         CurrentLives -= 1;
         PlayExplosionSound();
+        UpdateLivesUI();
         if (CurrentLives <= 0)
         {
 
@@ -45,14 +46,45 @@ public class Lives : MonoBehaviour
     public void GainALife()
     {
         CurrentLives += 1;
+        UpdateLivesUI();
     }
 
 	// Update is called once per frame
-	void Update ()
+	public void UpdateLivesUI()
 	{
 		if (RemainingLivesText != null)
 		{
             RemainingLivesText.text = "Lives: " + CurrentLives;
 		}
+        GameObject life1imgGO = GameObject.Find("life1");
+        Image life1img = life1imgGO.GetComponent<Image>();
+        GameObject life2imgGO = GameObject.Find("life2");
+        Image life2img = life2imgGO.GetComponent<Image>();
+        GameObject life3imgGO = GameObject.Find("life3");
+        Image life3img = life3imgGO.GetComponent<Image>();
+
+        switch (CurrentLives){
+            case 3:
+                life1img.enabled = true;
+                life2img.enabled = true;
+                life3img.enabled = true;
+                break;
+            case 2:
+                life1img.enabled = true;
+                life2img.enabled = true;
+                life3img.enabled = false;
+                break;
+            case 1:
+                life1img.enabled = true;
+                life2img.enabled = false;
+                life3img.enabled = false;
+                break;
+            case 0:
+                life1img.enabled = false;
+                life2img.enabled = false;
+                life3img.enabled = false;
+                break;
+        }
+      
     }
 }

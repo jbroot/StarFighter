@@ -31,6 +31,8 @@ public class PlayerScore : MonoBehaviour
 
     public void UpdateUIScore(int currentScore){
         TextMeshProUGUI scoreText = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
-        scoreText.text = currentScore.ToString();
+        if(scoreText != null){
+            scoreText.text = currentScore.ToString();
+        }
     }
 }
