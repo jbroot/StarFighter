@@ -35,7 +35,7 @@ public class PlayerShooter : MonoBehaviour {
             bulletPrefab.tag = "BaseLaser";
 			GameObject laser = Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
 		    laser.tag = "BaseLaser";
-		    laser.transform.parent = player.transform;
+		    
 
 		    //Physics2D.IgnoreCollision(laser.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true);
 		}
