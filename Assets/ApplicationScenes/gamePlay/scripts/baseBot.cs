@@ -410,8 +410,9 @@ public class baseBot : MonoBehaviour
             //make intangible explosion
 
             //Cheat script for single player scoring.
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            player.GetComponent<PlayerScore>().AddScore(gameObject.tag);
+            GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
+            PlayerScore player = playerGO.GetComponent<PlayerScore>();
+            player.AddScore(gameObject.tag);
 
             //Scoring should be done this way, but weird things with parents and time constraints don't allow it.
             if (collision.gameObject.GetComponentInParent<PlayerScore>() != null)

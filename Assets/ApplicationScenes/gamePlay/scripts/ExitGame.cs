@@ -78,11 +78,9 @@ public class ExitGame : MonoBehaviour {
         GameObject usernameInputGO = GameObject.Find("UsernameInputField");
         InputField usernameInput = usernameInputGO.GetComponent<InputField>();
         string uname = usernameInput.text;
-        //TODO get score 
-
-        PlayerScore ps = new PlayerScore();
-        
-        int score = ps.GetScore();
+        GameObject scoreUITextGO = GameObject.Find("Score");
+        TextMeshProUGUI scoreUIText = scoreUITextGO.GetComponent<TextMeshProUGUI>();
+        int score = int.Parse(scoreUIText.text);
 
         if(uname.Length > 0){
             HideErrorMessage();

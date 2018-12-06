@@ -83,6 +83,9 @@ public class Lives : MonoBehaviour
                 life1img.enabled = false;
                 life2img.enabled = false;
                 life3img.enabled = false;
+                GameObject gameOverBtn = GameObject.Find("gameoverInvisible");
+                Button goButton = gameOverBtn.GetComponent<Button>();
+                goButton.onClick.Invoke();
                 break;
         }
       
