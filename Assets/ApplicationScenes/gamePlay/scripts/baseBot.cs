@@ -60,6 +60,9 @@ public class baseBot : MonoBehaviour
     /// How long to show the explosion
     /// </summary>
     public float secondsBoomLasts = 1.3f;
+
+    public float offsetvalue = .75f;
+
     #endregion
 
     #region protected attributes
@@ -365,7 +368,7 @@ public class baseBot : MonoBehaviour
     protected virtual void shoot()
     {
         cooldownTimer = delayFireSec;
-        Vector3 offset = transform.rotation * new Vector3(0, 0.75f, 0);
+        Vector3 offset = transform.rotation * new Vector3(0, offsetvalue, 0);
         bulletPrefab.tag = "BaseLaser";
         Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
     }
