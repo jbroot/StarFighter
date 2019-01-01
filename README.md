@@ -9,3 +9,6 @@ Team members:
 3. Josh Allred
 3. Cameron 
 4. Jimmy
+
+Develop http://spacefighterweb.azurewebsites.net/develop/
+Main http://spacefighterweb.azurewebsites.net/webgl/
